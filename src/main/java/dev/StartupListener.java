@@ -1,5 +1,6 @@
 package dev;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -9,10 +10,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import dev.domain.Collegue;
+import dev.domain.LigneDeFrais;
+import dev.domain.Mission;
+import dev.domain.Nature;
+import dev.domain.NoteDeFrais;
+import dev.domain.Prime;
 import dev.domain.Role;
 import dev.domain.RoleCollegue;
 import dev.domain.Version;
 import dev.repository.CollegueRepo;
+import dev.repository.LigneDeFraisRepo;
+import dev.repository.MissionRepo;
+import dev.repository.NatureRepo;
+import dev.repository.NoteDeFraisRepo;
+import dev.repository.PrimeRepo;
 import dev.repository.VersionRepo;
 
 /**
@@ -25,13 +36,24 @@ public class StartupListener {
 	private VersionRepo versionRepo;
 	private PasswordEncoder passwordEncoder;
 	private CollegueRepo collegueRepo;
+	private PrimeRepo primeRepo;
+	private MissionRepo missionRepo;
+	private NatureRepo natureRepo;
+	private NoteDeFraisRepo noteDeFraisRepo;
+	private LigneDeFraisRepo ligneDeFraisRepo;
 
 	public StartupListener(@Value("${app.version}") String appVersion, VersionRepo versionRepo,
-			PasswordEncoder passwordEncoder, CollegueRepo collegueRepo) {
+			PasswordEncoder passwordEncoder, CollegueRepo collegueRepo, PrimeRepo primeRepo, MissionRepo missionRepo,
+			NatureRepo natureRepo, NoteDeFraisRepo noteDeFraisRepo, LigneDeFraisRepo ligneDeFraisRepo) {
 		this.appVersion = appVersion;
 		this.versionRepo = versionRepo;
 		this.passwordEncoder = passwordEncoder;
 		this.collegueRepo = collegueRepo;
+		this.primeRepo = primeRepo;
+		this.missionRepo = missionRepo;
+		this.natureRepo = natureRepo;
+		this.noteDeFraisRepo = noteDeFraisRepo;
+		this.ligneDeFraisRepo = ligneDeFraisRepo;
 	}
 
 	@EventListener(ContextRefreshedEvent.class)
@@ -54,7 +76,6 @@ public class StartupListener {
 		col2.setEmail("user@dev.fr");
 		col2.setMotDePasse(passwordEncoder.encode("superpass"));
 		col2.setRoles(Arrays.asList(new RoleCollegue(col2, Role.ROLE_EMPLOYE)));
-		this.collegueRepo.save(col2);
 
 		Collegue col3 = new Collegue();
 		col3.setNom("Manager");
@@ -63,7 +84,29 @@ public class StartupListener {
 		col3.setMotDePasse(passwordEncoder.encode("superpass"));
 		col3.setRoles(
 				Arrays.asList(new RoleCollegue(col3, Role.ROLE_MANAGER), new RoleCollegue(col3, Role.ROLE_EMPLOYE)));
+		col3.setSubordonnes(Arrays.asList(col2));
 		this.collegueRepo.save(col3);
+
+		col2.setManager(col3);
+		this.collegueRepo.save(col2);
+		Prime prime = new Prime(LocalDate.now(), 10000);
+		this.primeRepo.save(prime);
+		Nature nature = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.now(),
+				LocalDate.of(2021, 5, 1));
+		this.natureRepo.save(nature);
+		Mission mission = new Mission(prime, false, LocalDate.now(), "Paris", "Lille", "train");
+		mission.setCollegue(col2);
+		mission.setNature(nature);
+		mission.setPrime(prime);
+		this.missionRepo.save(mission);
+
+		NoteDeFrais noteDeFrais = new NoteDeFrais("facture1", 10000, LocalDate.now());
+		noteDeFrais.setMission(mission);
+		noteDeFraisRepo.save(noteDeFrais);
+
+		LigneDeFrais ligneDeFrais = new LigneDeFrais("restaurant", 1500);
+		ligneDeFrais.setNote_de_frais(noteDeFrais);
+		ligneDeFraisRepo.save(ligneDeFrais);
 
 	}
 
