@@ -1,4 +1,4 @@
-package dev.controller.vm;
+package dto;
 
 import java.time.LocalDate;
 
@@ -9,7 +9,7 @@ import dev.domain.Nature;
  * @author Salaheddine El Majdoub
  *
  */
-public class NotesDeFraisVM {
+public class NotesDeFraisDto {
 	
 	private LocalDate dateDebut;
     private LocalDate dateFin;
@@ -28,7 +28,7 @@ public class NotesDeFraisVM {
 	 * @param transport
 	 * @param frais
 	 */
-	public NotesDeFraisVM(LocalDate dateDebut, LocalDate dateFin, String nature, String depart, String arrivee,
+	public NotesDeFraisDto(LocalDate dateDebut, LocalDate dateFin, String nature, String depart, String arrivee,
 			String transport, Integer frais) {
 		super();
 		this.dateDebut = dateDebut;

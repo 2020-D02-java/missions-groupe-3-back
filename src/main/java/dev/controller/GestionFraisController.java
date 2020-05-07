@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.controller.vm.NotesDeFraisVM;
 import dev.domain.NoteDeFrais;
 import dev.repository.NoteDeFraisRepo;
+import dto.NotesDeFraisDto;
 
 @RestController
 @RequestMapping("/note")
@@ -22,11 +22,11 @@ public class GestionFraisController {
 		}
 	
 	  @GetMapping
-	  public List<NotesDeFraisVM> gestionNotesDeFrais() {
+	  public List<NotesDeFraisDto> gestionNotesDeFrais() {
 		  List<NoteDeFrais> notesFrais =  this.noteDeFraisRepo.findAll();
-		  List<NotesDeFraisVM> resultat = new ArrayList<>();
+		  List<NotesDeFraisDto> resultat = new ArrayList<>();
 		  for (NoteDeFrais note : notesFrais ) {
-			  resultat.add(new NotesDeFraisVM(note.getMission().getDate_debut(), note.getMission().getDate_fin(), 
+			  resultat.add(new NotesDeFraisDto(note.getMission().getDate_debut(), note.getMission().getDate_fin(), 
 					  note.getMission().getNature().getNom(), note.getMission().getVille_depart(), 
 					  note.getMission().getVille_arrive(),   note.getMission().getTransport(), 
 					  note.getPrix()));

@@ -17,9 +17,8 @@ import dev.repository.CollegueRepo;
 import dev.repository.MissionRepo;
 import dev.repository.PrimeRepo;
 
-@RunWith(SpringRunner.class)
+
 @DataJpaTest
-@Transactional
 public class DomMissionTest {
 	@Autowired
 	CollegueRepo collegueRepo;
