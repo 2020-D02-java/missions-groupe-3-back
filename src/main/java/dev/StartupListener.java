@@ -94,7 +94,8 @@ public class StartupListener {
 		Nature nature = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.now(),
 				LocalDate.of(2021, 5, 1));
 		this.natureRepo.save(nature);
-		Mission mission = new Mission(prime, false, LocalDate.now(), "Paris", "Lille", "train");
+		Mission mission = new Mission(prime, false, LocalDate.of(2020, 05, 20), "Paris", "Lille", "train");
+		mission.setDate_fin(LocalDate.of(2020, 05, 25));
 		mission.setCollegue(col2);
 		mission.setNature(nature);
 		mission.setPrime(prime);
