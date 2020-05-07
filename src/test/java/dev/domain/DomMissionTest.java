@@ -7,19 +7,15 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import dev.repository.CollegueRepo;
 import dev.repository.MissionRepo;
 import dev.repository.PrimeRepo;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @DataJpaTest
-@Transactional
 public class DomMissionTest {
 	@Autowired
 	CollegueRepo collegueRepo;
