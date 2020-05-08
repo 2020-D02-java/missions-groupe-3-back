@@ -16,6 +16,8 @@ public class MissionDtoPost {
 
 	private String transport;
 
+	private String collegue_email;
+
 	/**
 	 * Constructor
 	 * 
@@ -29,9 +31,10 @@ public class MissionDtoPost {
 	 * @param ville_depart
 	 * @param ville_arrive
 	 * @param transport
+	 * @param collegue_email
 	 */
 	public MissionDtoPost(String nature, LocalDate date_debut, LocalDate date_fin, String ville_depart,
-			String ville_arrivee, String transport) {
+			String ville_arrivee, String transport, String collegue_email) {
 		super();
 		this.nature = nature;
 		this.date_debut = date_debut;
@@ -39,6 +42,7 @@ public class MissionDtoPost {
 		this.ville_depart = ville_depart;
 		this.ville_arrivee = ville_arrivee;
 		this.transport = transport;
+		this.collegue_email = collegue_email;
 	}
 
 	/**
@@ -147,6 +151,33 @@ public class MissionDtoPost {
 	 */
 	public void setTransport(String transport) {
 		this.transport = transport;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the collegue_email
+	 */
+	public String getCollegue_email() {
+		return collegue_email;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param collegue_email the collegue_email to set
+	 */
+	public void setCollegue_email(String collegue_email) {
+		this.collegue_email = collegue_email;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param ville_arrivee the ville_arrivee to set
+	 */
+	public void setVille_arrivee(String ville_arrivee) {
+		this.ville_arrivee = ville_arrivee;
 	}
 
 }

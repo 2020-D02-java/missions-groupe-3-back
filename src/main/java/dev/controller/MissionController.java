@@ -3,6 +3,7 @@ package dev.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.domain.Collegue;
 import dev.domain.Mission;
 import dev.domain.Nature;
+import dev.repository.CollegueRepo;
 import dev.repository.MissionRepo;
 import dev.repository.NatureRepo;
 import dto.MissionDto;
@@ -32,7 +35,10 @@ public class MissionController {
 	@Autowired
 	NatureRepo natureRepo;
 
-	// GET : all
+	@Autowired
+	CollegueRepo collegueRepo;
+
+	/** GET : all */
 	@GetMapping
 	public List<MissionDto> missions() {
 		List<Mission> missions = missionRepo.findAll();
@@ -55,23 +61,32 @@ public class MissionController {
 		return missionsDto;
 	}
 
-	// GET : missions?start=x&end=y
-	// verifie si il n'y a pas d'autres missions sur le creneau
+	/***
+	 * GET : missions?start=yyyy-MM-dd&end=yyyy-MM-dd&email=xxx@dev.fr verifie si il
+	 * n'y a pas d'autres missions sur le creneau
+	 */
 	@GetMapping
 	@RequestMapping(value = "/disponibilite")
 	public String missionDisponible(@RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-			@RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
-		List<Mission> missions = missionRepo.findAll();
-		System.out.println(start.toString() + " " + end.toString());
-		for (Mission mission : missions) {
-			if (mission.getDate_debut().compareTo(start) < 0 && mission.getDate_fin().compareTo(end) > 0)
-				return "false";
-			if (mission.getDate_debut().compareTo(start) > 0 && mission.getDate_debut().compareTo(end) < 0)
-				return "false";
-			if (mission.getDate_fin().compareTo(start) > 0 && mission.getDate_fin().compareTo(end) < 0)
-				return "false";
+			@RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
+			@RequestParam("email") String email) {
+		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
+		if (collegueOptional.isPresent()) {
+			Collegue collegue = collegueOptional.get();
+			List<Mission> missions = missionRepo.findByCollegue(collegue);
+			System.out.println(missions);
+			for (Mission mission : missions) {
+				if (mission.getDate_debut().compareTo(start) <= 0 && mission.getDate_fin().compareTo(end) >= 0)
+					return "false";
+				if (mission.getDate_debut().compareTo(start) >= 0 && mission.getDate_debut().compareTo(end) <= 0)
+					return "false";
+				if (mission.getDate_fin().compareTo(start) >= 0 && mission.getDate_fin().compareTo(end) <= 0)
+					return "false";
+			}
+			return "true";
+		} else {
+			return "erreur:404";
 		}
-		return "true";
 	}
 
 	/** POST : missions/ ------ creation d'une mission */
@@ -92,8 +107,21 @@ public class MissionController {
 		mission.setStatut("Initiale");
 		mission.setVille_arrive(missionDto.getVille_arrivee());
 		mission.setVille_depart(missionDto.getVille_depart());
+		Optional<Collegue> collegueOptionnal = collegueRepo.findByEmail(missionDto.getCollegue_email());
+		if (collegueOptionnal.isPresent()) {
+			mission.setCollegue(collegueOptionnal.get());
+		} else {
+			return ResponseEntity.status(400).body("\"erreur:404collegueNonTrouve\"");
+		}
+		Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
+		if (natureOptional.isPresent()) {
+			mission.setNature(natureOptional.get());
+		} else {
+			return ResponseEntity.status(400)
+					.body(new String("\"erreur:404 nature non trouvee : " + missionDto.getNature() + "\""));
+		}
 		missionRepo.save(mission);
-		return ResponseEntity.status(200).body(mission);
+		return ResponseEntity.status(200).body(missionDto);
 	}
 
 }
