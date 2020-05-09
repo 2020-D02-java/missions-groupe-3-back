@@ -105,7 +105,16 @@ public class StartupListener {
 		mission.setCollegue(col2);
 		mission.setNature(nature);
 		mission.setPrime(prime);
+		mission.setStatut("Initiale");
 		this.missionRepo.save(mission);
+
+		Mission mission2 = new Mission(prime, false, LocalDate.of(2020, 05, 26), "Paris", "Lyon", "train");
+		mission2.setDate_fin(LocalDate.of(2020, 05, 30));
+		mission2.setCollegue(col2);
+		mission2.setNature(nature);
+		mission2.setPrime(prime);
+		mission2.setStatut("Validee");
+		this.missionRepo.save(mission2);
 
 		NoteDeFrais noteDeFrais = new NoteDeFrais("facture1", 10000, LocalDate.now());
 		noteDeFrais.setMission(mission);

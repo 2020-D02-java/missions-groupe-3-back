@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,17 +47,47 @@ public class MissionController {
 		for (Mission mission : missions) {
 			MissionDto missionDto;
 			if (mission.getCollegue() != null) {
-				missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), mission.getNature(),
-						mission.getPrime(), mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
-						mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
-						mission.getStatut());
+				missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
+						mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
+						mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
+						mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
 			} else {
-				missionDto = new MissionDto(mission.getId(), -1, mission.getNature(), mission.getPrime(),
+				missionDto = new MissionDto(mission.getId(), -1, mission.getNature().getNom(), mission.getPrime(),
 						mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
 						mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
 						mission.getStatut());
 			}
 			missionsDto.add(missionDto);
+		}
+		return missionsDto;
+	}
+
+	/**
+	 * GET : missions/collegue?email=xxx@dev.fr recupere les missions d'un collegue
+	 */
+	@GetMapping
+	@RequestMapping(value = "/collegue")
+	public List<MissionDto> missionsCollegue(@RequestParam("email") String email) {
+		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
+		List<MissionDto> missionsDto = new ArrayList<>();
+		if (collegueOptional.isPresent()) {
+			Collegue collegue = collegueOptional.get();
+			List<Mission> missions = missionRepo.findByCollegue(collegue);
+			for (Mission mission : missions) {
+				MissionDto missionDto;
+				if (mission.getCollegue() != null) {
+					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
+							mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
+							mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
+							mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
+				} else {
+					missionDto = new MissionDto(mission.getId(), -1, mission.getNature().getNom(), mission.getPrime(),
+							mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
+							mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
+							mission.getStatut());
+				}
+				missionsDto.add(missionDto);
+			}
 		}
 		return missionsDto;
 	}
@@ -85,7 +116,7 @@ public class MissionController {
 			}
 			return "true";
 		} else {
-			return "erreur:404";
+			return "\"erreur:404\"";
 		}
 	}
 
@@ -122,6 +153,23 @@ public class MissionController {
 		}
 		missionRepo.save(mission);
 		return ResponseEntity.status(200).body(missionDto);
+	}
+
+	@DeleteMapping
+	@RequestMapping(value = "/delete")
+	@CrossOrigin
+	public String missionDisponible(@RequestParam("email") String email,
+			@RequestParam("date_debut") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_debut,
+			@RequestParam("date_fin") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_fin) {
+		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
+		if (collegueOptional.isPresent()) {
+			Collegue collegue = collegueOptional.get();
+			Mission mission = missionRepo.findByCollegueAndDates(collegue.getId(), date_debut, date_fin);
+			missionRepo.delete(mission);
+			return "\"mission supprimee\"";
+		} else {
+			return "\"erreur:404\"";
+		}
 	}
 
 }
