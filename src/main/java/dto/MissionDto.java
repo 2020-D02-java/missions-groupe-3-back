@@ -1,30 +1,17 @@
-package dev.domain;
+package dto;
 
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import dev.domain.Nature;
+import dev.domain.Prime;
 
-@Entity
-public class Mission {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MissionDto {
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "collegue_id")
-	private Collegue collegue;
+	private long collegueId;
 
-	@ManyToOne
-	@JoinColumn(name = "nature_id")
 	private Nature nature;
 
-	@ManyToOne
-	@JoinColumn(name = "prime_id")
 	private Prime prime;
 
 	private boolean validation;
@@ -44,14 +31,9 @@ public class Mission {
 	/**
 	 * Constructor
 	 * 
-	 */
-	public Mission() {
-		super();
-	}
-
-	/**
-	 * Constructor
-	 * 
+	 * @param id
+	 * @param collegueId
+	 * @param nature
 	 * @param prime
 	 * @param validation
 	 * @param date_debut
@@ -60,15 +42,20 @@ public class Mission {
 	 * @param ville_arrive
 	 * @param transport
 	 */
-	public Mission(Prime prime, boolean validation, LocalDate date_debut, String ville_depart, String ville_arrive,
-			String transport) {
+	public MissionDto(Integer id, long collegueId, Nature nature, Prime prime, boolean validation, LocalDate date_debut,
+			LocalDate date_fin, String ville_depart, String ville_arrive, String transport, String statut) {
 		super();
+		this.id = id;
+		this.collegueId = collegueId;
+		this.nature = nature;
 		this.prime = prime;
 		this.validation = validation;
 		this.date_debut = date_debut;
+		this.date_fin = date_fin;
 		this.ville_depart = ville_depart;
 		this.ville_arrive = ville_arrive;
 		this.transport = transport;
+		this.statut = statut;
 	}
 
 	/**
@@ -81,21 +68,30 @@ public class Mission {
 	}
 
 	/**
+	 * Setter
+	 * 
+	 * @param id the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
 	 * Getter
 	 * 
-	 * @return the collegue
+	 * @return the collegueId
 	 */
-	public Collegue getCollegue() {
-		return collegue;
+	public long getCollegueId() {
+		return collegueId;
 	}
 
 	/**
 	 * Setter
 	 * 
-	 * @param collegue the collegue to set
+	 * @param collegueId the collegueId to set
 	 */
-	public void setCollegue(Collegue collegue) {
-		this.collegue = collegue;
+	public void setCollegueId(long collegueId) {
+		this.collegueId = collegueId;
 	}
 
 	/**
