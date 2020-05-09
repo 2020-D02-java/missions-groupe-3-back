@@ -1,8 +1,10 @@
 package dev.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import dev.domain.Collegue;
 import dev.domain.Mission;
@@ -10,5 +12,8 @@ import dev.domain.Mission;
 public interface MissionRepo extends JpaRepository<Mission, Long> {
 
 	List<Mission> findByCollegue(Collegue collegue);
+
+	@Query("SELECT m FROM Mission m WHERE m.collegue.id = ?1 AND m.date_debut = ?2 AND m.date_fin = ?3")
+	Mission findByCollegueAndDates(Long id, LocalDate date_debut, LocalDate date_fin);
 
 }
