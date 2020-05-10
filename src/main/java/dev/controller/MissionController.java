@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import dev.domain.Nature;
 import dev.repository.CollegueRepo;
 import dev.repository.MissionRepo;
 import dev.repository.NatureRepo;
+import dev.services.DtoToEntite;
 import dto.MissionDto;
 import dto.MissionDtoPost;
 
@@ -75,13 +77,13 @@ public class MissionController {
 			List<Mission> missions = missionRepo.findByCollegue(collegue);
 			for (Mission mission : missions) {
 				MissionDto missionDto;
-				if (mission.getCollegue() != null) {
+				if (mission.getNature() != null) {
 					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
 							mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
 							mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
 							mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
 				} else {
-					missionDto = new MissionDto(mission.getId(), -1, mission.getNature().getNom(), mission.getPrime(),
+					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), "", mission.getPrime(),
 							mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
 							mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
 							mission.getStatut());
@@ -94,25 +96,36 @@ public class MissionController {
 
 	/***
 	 * GET : missions?start=yyyy-MM-dd&end=yyyy-MM-dd&email=xxx@dev.fr verifie si il
-	 * n'y a pas d'autres missions sur le creneau
+	 * n'y a pas d'autres missions sur le creneau une exception est creee pour la
+	 * verification de disponibilite pour la mise a jour d'une mission
 	 */
 	@GetMapping
 	@RequestMapping(value = "/disponibilite")
 	public String missionDisponible(@RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
 			@RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
-			@RequestParam("email") String email) {
+			@RequestParam("email") String email, @RequestParam("exception") Integer exception) {
 		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
 		if (collegueOptional.isPresent()) {
 			Collegue collegue = collegueOptional.get();
 			List<Mission> missions = missionRepo.findByCollegue(collegue);
-			System.out.println(missions);
 			for (Mission mission : missions) {
-				if (mission.getDate_debut().compareTo(start) <= 0 && mission.getDate_fin().compareTo(end) >= 0)
-					return "false";
-				if (mission.getDate_debut().compareTo(start) >= 0 && mission.getDate_debut().compareTo(end) <= 0)
-					return "false";
-				if (mission.getDate_fin().compareTo(start) >= 0 && mission.getDate_fin().compareTo(end) <= 0)
-					return "false";
+				if (mission.getId() != exception) {
+					if (mission.getDate_debut() != null && mission.getDate_fin() != null) {
+						if (mission.getDate_debut().compareTo(start) <= 0 && mission.getDate_fin().compareTo(end) >= 0)
+							return "false";
+						if (mission.getDate_debut().compareTo(start) >= 0
+								&& mission.getDate_debut().compareTo(end) <= 0)
+							return "false";
+						if (mission.getDate_fin().compareTo(start) >= 0 && mission.getDate_fin().compareTo(end) <= 0)
+							return "false";
+					}
+					if (mission.getDate_debut() != null && (mission.getDate_debut().compareTo(start) == 0
+							|| mission.getDate_debut().compareTo(end) == 0))
+						return "false";
+					if (mission.getDate_fin() != null && (mission.getDate_fin().compareTo(start) == 0
+							|| mission.getDate_fin().compareTo(end) == 0))
+						return "false";
+				}
 			}
 			return "true";
 		} else {
@@ -124,16 +137,9 @@ public class MissionController {
 	@PostMapping
 	@CrossOrigin
 	public ResponseEntity<Object> creationMission(@RequestBody MissionDtoPost missionDto) {
-		List<Nature> natures = natureRepo.findAll();
-		Nature nature = null;
 		Mission mission = new Mission();
-		for (Nature element : natures) {
-			if (missionDto.getNature().equals(element.getNom()))
-				nature = element;
-		}
 		mission.setDate_debut(missionDto.getDate_debut());
 		mission.setDate_fin(missionDto.getDate_fin());
-		mission.setNature(nature);
 		mission.setTransport(missionDto.getTransport());
 		mission.setStatut("Initiale");
 		mission.setVille_arrive(missionDto.getVille_arrivee());
@@ -147,28 +153,44 @@ public class MissionController {
 		Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
 		if (natureOptional.isPresent()) {
 			mission.setNature(natureOptional.get());
-		} else {
-			return ResponseEntity.status(400)
-					.body(new String("\"erreur:404 nature non trouvee : " + missionDto.getNature() + "\""));
 		}
 		missionRepo.save(mission);
 		return ResponseEntity.status(200).body(missionDto);
 	}
 
+	/** Supprime une mission */
 	@DeleteMapping
 	@RequestMapping(value = "/delete")
 	@CrossOrigin
-	public String missionDisponible(@RequestParam("email") String email,
-			@RequestParam("date_debut") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_debut,
-			@RequestParam("date_fin") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_fin) {
-		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
-		if (collegueOptional.isPresent()) {
-			Collegue collegue = collegueOptional.get();
-			Mission mission = missionRepo.findByCollegueAndDates(collegue.getId(), date_debut, date_fin);
-			missionRepo.delete(mission);
+	public String missionDisponible(@RequestParam("id") Integer id) {
+		Optional<Mission> mission = missionRepo.findById(id);
+		if (mission.isPresent()) {
+			missionRepo.delete(mission.get());
 			return "\"mission supprimee\"";
 		} else {
 			return "\"erreur:404\"";
+		}
+	}
+
+	/** met a jour les donnees d'une mission */
+	@PatchMapping
+	@CrossOrigin
+	public ResponseEntity<String> updateClient(@RequestBody MissionDto missionDto) {
+		Optional<Mission> missionOptional = missionRepo.findById(missionDto.getId());
+		if (missionOptional.isPresent()) {
+			Mission mission = missionOptional.get();
+			mission = DtoToEntite.dtoToMission(mission, missionDto);
+			Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
+			if (natureOptional.isPresent()) {
+				mission.setNature(natureOptional.get());
+			} else {
+				return ResponseEntity.status(400)
+						.body(new String("\"erreur:404 nature non trouvee : " + missionDto.getNature() + "\""));
+			}
+			missionRepo.save(mission);
+			return ResponseEntity.status(200).body("\"Mission creee\"");
+		} else {
+			return ResponseEntity.status(400).body("\"Erreur:404 Mission non trouvee\"");
 		}
 	}
 
