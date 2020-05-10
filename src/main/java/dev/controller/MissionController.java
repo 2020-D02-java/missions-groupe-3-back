@@ -185,7 +185,7 @@ public class MissionController {
 				mission.setNature(natureOptional.get());
 			}
 			missionRepo.save(mission);
-			return ResponseEntity.status(200).body("\"modification\"");
+			return ResponseEntity.status(200).body("\"modifiee\"");
 		} else {
 			return ResponseEntity.status(400).body("\"Erreur:404 Mission non trouvee\"");
 		}
