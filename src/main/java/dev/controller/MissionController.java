@@ -191,4 +191,72 @@ public class MissionController {
 		}
 	}
 
+	/** GET : all trier par la date de debut */
+	@GetMapping
+	@RequestMapping(value = "/triDateDebut")
+	public List<MissionDto> missionsTirParDateDebut(@RequestParam("email") String email,
+			@RequestParam("tri") boolean tri) {
+
+		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
+		List<MissionDto> missionsDto = new ArrayList<>();
+		if (collegueOptional.isPresent()) {
+			Collegue collegue = collegueOptional.get();
+			List<Mission> missions = new ArrayList<>();
+			if (tri == true)
+				missions = missionRepo.findByCollegueDateDebutAsc(collegue.getId());
+			else if (tri == false)
+				missions = missionRepo.findByCollegueDateDebutDesc(collegue.getId());
+			for (Mission mission : missions) {
+				MissionDto missionDto;
+				if (mission.getNature() != null) {
+					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
+							mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
+							mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
+							mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
+				} else {
+					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), "", mission.getPrime(),
+							mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
+							mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
+							mission.getStatut());
+				}
+				missionsDto.add(missionDto);
+			}
+		}
+		return missionsDto;
+	}
+
+	/** GET : all trier par la date de fin */
+	@GetMapping
+	@RequestMapping(value = "/triDateFin")
+	public List<MissionDto> missionsTirParDateFin(@RequestParam("email") String email,
+			@RequestParam("tri") boolean tri) {
+
+		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
+		List<MissionDto> missionsDto = new ArrayList<>();
+		if (collegueOptional.isPresent()) {
+			Collegue collegue = collegueOptional.get();
+			List<Mission> missions = new ArrayList<>();
+			if (tri == true)
+				missions = missionRepo.findByCollegueDateFinAsc(collegue.getId());
+			else if (tri == false)
+				missions = missionRepo.findByCollegueDateFinDesc(collegue.getId());
+			for (Mission mission : missions) {
+				MissionDto missionDto;
+				if (mission.getNature() != null) {
+					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
+							mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
+							mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
+							mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
+				} else {
+					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), "", mission.getPrime(),
+							mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
+							mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
+							mission.getStatut());
+				}
+				missionsDto.add(missionDto);
+			}
+		}
+		return missionsDto;
+	}
+
 }
