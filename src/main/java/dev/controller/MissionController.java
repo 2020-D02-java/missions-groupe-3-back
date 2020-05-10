@@ -183,12 +183,9 @@ public class MissionController {
 			Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
 			if (natureOptional.isPresent()) {
 				mission.setNature(natureOptional.get());
-			} else {
-				return ResponseEntity.status(400)
-						.body(new String("\"erreur:404 nature non trouvee : " + missionDto.getNature() + "\""));
 			}
 			missionRepo.save(mission);
-			return ResponseEntity.status(200).body("\"Mission creee\"");
+			return ResponseEntity.status(200).body("\"Mission modifiee\"");
 		} else {
 			return ResponseEntity.status(400).body("\"Erreur:404 Mission non trouvee\"");
 		}
