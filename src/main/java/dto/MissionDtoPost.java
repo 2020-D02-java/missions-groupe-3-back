@@ -18,6 +18,8 @@ public class MissionDtoPost {
 
 	private String collegue_email;
 
+	private String statut;
+
 	/**
 	 * Constructor
 	 * 
@@ -178,6 +180,24 @@ public class MissionDtoPost {
 	 */
 	public void setVille_arrivee(String ville_arrivee) {
 		this.ville_arrivee = ville_arrivee;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the statut
+	 */
+	public String getStatut() {
+		return statut;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param statut the statut to set
+	 */
+	public void setStatut(String statut) {
+		this.statut = statut;
 	}
 
 }

@@ -57,6 +57,10 @@ public class MissionDto {
 		this.statut = statut;
 	}
 
+	public MissionDto() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * Getter
 	 * 
