@@ -14,6 +14,7 @@ import dev.repository.CollegueRepo;
 import dev.repository.MissionRepo;
 import dev.repository.PrimeRepo;
 
+
 @DataJpaTest
 public class DomMissionTest {
 	@Autowired
