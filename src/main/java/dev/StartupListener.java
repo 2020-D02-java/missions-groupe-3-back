@@ -94,12 +94,45 @@ public class StartupListener {
 		Nature nature = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.now(),
 				LocalDate.of(2021, 5, 1));
 		this.natureRepo.save(nature);
-		Mission mission = new Mission(prime, false, LocalDate.now(), "Paris", "Lille", "train");
-		mission.setDate_fin(LocalDate.of(2020, 04, 23));
+
+		Nature nature2 = new Nature("Formation", false, false, 10000, 7, 50000, false, LocalDate.now(),
+				LocalDate.of(2021, 5, 1));
+		this.natureRepo.save(nature2);
+		Nature nature3 = new Nature("Expertise_technique", false, false, 10000, 7, 50000, false, LocalDate.now(),
+				LocalDate.of(2021, 5, 1));
+		this.natureRepo.save(nature3);
+
+		Mission mission = new Mission(prime, false, LocalDate.of(2020, 05, 20), "Paris", "Lille", "train");
+		mission.setDate_fin(LocalDate.of(2020, 05, 25));
 		mission.setCollegue(col2);
 		mission.setNature(nature);
 		mission.setPrime(prime);
+		mission.setStatut("INITIALE");
 		this.missionRepo.save(mission);
+
+		Mission mission2 = new Mission(prime, false, LocalDate.of(2020, 05, 26), "Paris", "Lyon", "train");
+		mission2.setDate_fin(LocalDate.of(2020, 05, 27));
+		mission2.setCollegue(col2);
+		mission2.setNature(nature);
+		mission2.setPrime(prime);
+		mission2.setStatut("VALIDEE");
+		this.missionRepo.save(mission2);
+
+		Mission mission3 = new Mission(prime, false, LocalDate.of(2020, 05, 28), "Paris", "Bordeaux", "covoiturage");
+		mission3.setDate_fin(LocalDate.of(2020, 05, 28));
+		mission3.setCollegue(col2);
+		mission3.setNature(nature2);
+		mission3.setPrime(prime);
+		mission3.setStatut("EN_ATTENTE_VALIDATION");
+		this.missionRepo.save(mission3);
+
+		Mission mission4 = new Mission(prime, false, LocalDate.of(2020, 05, 29), "Paris", "Nantes", "covoiturage");
+		mission4.setDate_fin(LocalDate.of(2020, 05, 29));
+		mission4.setCollegue(col2);
+		mission4.setNature(nature3);
+		mission4.setPrime(prime);
+		mission4.setStatut("EN_ATTENTE_VALIDATION");
+		this.missionRepo.save(mission4);
 
 		NoteDeFrais noteDeFrais = new NoteDeFrais("facture1", 10000, LocalDate.now());
 		noteDeFrais.setMission(mission);

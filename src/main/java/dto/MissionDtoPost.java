@@ -1,33 +1,10 @@
-package dev.domain;
+package dto;
 
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+public class MissionDtoPost {
 
-@Entity
-public class Mission {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-
-	@ManyToOne
-	@JoinColumn(name = "collegue_id")
-	private Collegue collegue;
-
-	@ManyToOne
-	@JoinColumn(name = "nature_id")
-	private Nature nature;
-
-	@ManyToOne
-	@JoinColumn(name = "prime_id")
-	private Prime prime;
-
-	private boolean validation;
+	private String nature;
 
 	private LocalDate date_debut;
 
@@ -35,23 +12,20 @@ public class Mission {
 
 	private String ville_depart;
 
-	private String ville_arrive;
+	private String ville_arrivee;
 
 	private String transport;
+
+	private String collegue_email;
 
 	private String statut;
 
 	/**
 	 * Constructor
 	 * 
-	 */
-	public Mission() {
-		super();
-	}
-
-	/**
-	 * Constructor
-	 * 
+	 * @param id
+	 * @param collegueId
+	 * @param nature
 	 * @param prime
 	 * @param validation
 	 * @param date_debut
@@ -59,43 +33,18 @@ public class Mission {
 	 * @param ville_depart
 	 * @param ville_arrive
 	 * @param transport
+	 * @param collegue_email
 	 */
-	public Mission(Prime prime, boolean validation, LocalDate date_debut, String ville_depart, String ville_arrive,
-			String transport) {
+	public MissionDtoPost(String nature, LocalDate date_debut, LocalDate date_fin, String ville_depart,
+			String ville_arrivee, String transport, String collegue_email) {
 		super();
-		this.prime = prime;
-		this.validation = validation;
+		this.nature = nature;
 		this.date_debut = date_debut;
+		this.date_fin = date_fin;
 		this.ville_depart = ville_depart;
-		this.ville_arrive = ville_arrive;
+		this.ville_arrivee = ville_arrivee;
 		this.transport = transport;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the collegue
-	 */
-	public Collegue getCollegue() {
-		return collegue;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param collegue the collegue to set
-	 */
-	public void setCollegue(Collegue collegue) {
-		this.collegue = collegue;
+		this.collegue_email = collegue_email;
 	}
 
 	/**
@@ -103,7 +52,7 @@ public class Mission {
 	 * 
 	 * @return the nature
 	 */
-	public Nature getNature() {
+	public String getNature() {
 		return nature;
 	}
 
@@ -112,44 +61,8 @@ public class Mission {
 	 * 
 	 * @param nature the nature to set
 	 */
-	public void setNature(Nature nature) {
+	public void setNature(String nature) {
 		this.nature = nature;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the prime
-	 */
-	public Prime getPrime() {
-		return prime;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param prime the prime to set
-	 */
-	public void setPrime(Prime prime) {
-		this.prime = prime;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the validation
-	 */
-	public boolean isValidation() {
-		return validation;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param validation the validation to set
-	 */
-	public void setValidation(boolean validation) {
-		this.validation = validation;
 	}
 
 	/**
@@ -211,8 +124,8 @@ public class Mission {
 	 * 
 	 * @return the ville_arrive
 	 */
-	public String getVille_arrive() {
-		return ville_arrive;
+	public String getVille_arrivee() {
+		return ville_arrivee;
 	}
 
 	/**
@@ -220,8 +133,8 @@ public class Mission {
 	 * 
 	 * @param ville_arrive the ville_arrive to set
 	 */
-	public void setVille_arrive(String ville_arrive) {
-		this.ville_arrive = ville_arrive;
+	public void setVille_arrive(String ville_arrivee) {
+		this.ville_arrivee = ville_arrivee;
 	}
 
 	/**
@@ -240,6 +153,33 @@ public class Mission {
 	 */
 	public void setTransport(String transport) {
 		this.transport = transport;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the collegue_email
+	 */
+	public String getCollegue_email() {
+		return collegue_email;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param collegue_email the collegue_email to set
+	 */
+	public void setCollegue_email(String collegue_email) {
+		this.collegue_email = collegue_email;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param ville_arrivee the ville_arrivee to set
+	 */
+	public void setVille_arrivee(String ville_arrivee) {
+		this.ville_arrivee = ville_arrivee;
 	}
 
 	/**
