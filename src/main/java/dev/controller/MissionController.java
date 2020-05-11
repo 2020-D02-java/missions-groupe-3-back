@@ -25,6 +25,7 @@ import dev.repository.CollegueRepo;
 import dev.repository.MissionRepo;
 import dev.repository.NatureRepo;
 import dev.services.DtoToEntite;
+import dev.services.EntiteToDto;
 import dto.MissionDto;
 import dto.MissionDtoPost;
 
@@ -47,18 +48,8 @@ public class MissionController {
 		List<Mission> missions = missionRepo.findAll();
 		List<MissionDto> missionsDto = new ArrayList<>();
 		for (Mission mission : missions) {
-			MissionDto missionDto;
-			if (mission.getCollegue() != null) {
-				missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
-						mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
-						mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
-						mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
-			} else {
-				missionDto = new MissionDto(mission.getId(), -1, mission.getNature().getNom(), mission.getPrime(),
-						mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
-						mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
-						mission.getStatut());
-			}
+			MissionDto missionDto = new MissionDto();
+			missionDto = EntiteToDto.missionToDto(missionDto, mission);
 			missionsDto.add(missionDto);
 		}
 		return missionsDto;
@@ -76,18 +67,8 @@ public class MissionController {
 			Collegue collegue = collegueOptional.get();
 			List<Mission> missions = missionRepo.findByCollegue(collegue);
 			for (Mission mission : missions) {
-				MissionDto missionDto;
-				if (mission.getNature() != null) {
-					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
-							mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
-							mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
-							mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
-				} else {
-					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), "", mission.getPrime(),
-							mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
-							mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
-							mission.getStatut());
-				}
+				MissionDto missionDto = new MissionDto();
+				missionDto = EntiteToDto.missionToDto(missionDto, mission);
 				missionsDto.add(missionDto);
 			}
 		}
@@ -137,25 +118,24 @@ public class MissionController {
 	@PostMapping
 	@CrossOrigin
 	public ResponseEntity<Object> creationMission(@RequestBody MissionDtoPost missionDto) {
-		Mission mission = new Mission();
-		mission.setDate_debut(missionDto.getDate_debut());
-		mission.setDate_fin(missionDto.getDate_fin());
-		mission.setTransport(missionDto.getTransport());
-		mission.setStatut("Initiale");
-		mission.setVille_arrive(missionDto.getVille_arrivee());
-		mission.setVille_depart(missionDto.getVille_depart());
-		Optional<Collegue> collegueOptionnal = collegueRepo.findByEmail(missionDto.getCollegue_email());
-		if (collegueOptionnal.isPresent()) {
-			mission.setCollegue(collegueOptionnal.get());
+		if (missionDto.getDate_debut() != null) {
+			Mission mission = new Mission();
+			mission = DtoToEntite.dtoPostToMission(mission, missionDto);
+			Optional<Collegue> collegueOptionnal = collegueRepo.findByEmail(missionDto.getCollegue_email());
+			if (collegueOptionnal.isPresent()) {
+				mission.setCollegue(collegueOptionnal.get());
+			} else {
+				return ResponseEntity.status(400).body("\"erreur:404collegueNonTrouve\"");
+			}
+			Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
+			if (natureOptional.isPresent()) {
+				mission.setNature(natureOptional.get());
+			}
+			missionRepo.save(mission);
+			return ResponseEntity.status(200).body(missionDto);
 		} else {
-			return ResponseEntity.status(400).body("\"erreur:404collegueNonTrouve\"");
+			return ResponseEntity.status(400).body("\"Requete vide\"");
 		}
-		Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
-		if (natureOptional.isPresent()) {
-			mission.setNature(natureOptional.get());
-		}
-		missionRepo.save(mission);
-		return ResponseEntity.status(200).body(missionDto);
 	}
 
 	/** Supprime une mission */
@@ -177,24 +157,31 @@ public class MissionController {
 	@CrossOrigin
 	public ResponseEntity<String> updateClient(@RequestBody MissionDto missionDto) {
 		Optional<Mission> missionOptional = missionRepo.findById(missionDto.getId());
-		if (missionOptional.isPresent()) {
-			Mission mission = missionOptional.get();
-			mission = DtoToEntite.dtoToMission(mission, missionDto);
-			Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
-			if (natureOptional.isPresent()) {
-				mission.setNature(natureOptional.get());
+		if (missionDto.getDate_debut() != null) {
+			if (missionOptional.isPresent()) {
+				Mission mission = missionOptional.get();
+				mission = DtoToEntite.dtoToMission(mission, missionDto);
+				Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
+				if (natureOptional.isPresent()) {
+					mission.setNature(natureOptional.get());
+				}
+				missionRepo.save(mission);
+				return ResponseEntity.status(200).body("\"modifiee\"");
+			} else {
+				return ResponseEntity.status(400).body("\"Erreur:404 Mission non trouvee\"");
 			}
-			missionRepo.save(mission);
-			return ResponseEntity.status(200).body("\"modifiee\"");
 		} else {
-			return ResponseEntity.status(400).body("\"Erreur:404 Mission non trouvee\"");
+			return ResponseEntity.status(400).body("\"Requete avec attributs null\"");
 		}
 	}
 
-	/** GET : all trier par la date de debut */
+	/**
+	 * GET : trier par la date de debut
+	 * missions/triDateDebut?email=xxx@dev.fr&tri=true/false
+	 */
 	@GetMapping
 	@RequestMapping(value = "/triDateDebut")
-	public List<MissionDto> missionsTirParDateDebut(@RequestParam("email") String email,
+	public List<MissionDto> missionsTriParDateDebut(@RequestParam("email") String email,
 			@RequestParam("tri") boolean tri) {
 
 		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
@@ -207,28 +194,21 @@ public class MissionController {
 			else if (tri == false)
 				missions = missionRepo.findByCollegueDateDebutDesc(collegue.getId());
 			for (Mission mission : missions) {
-				MissionDto missionDto;
-				if (mission.getNature() != null) {
-					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
-							mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
-							mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
-							mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
-				} else {
-					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), "", mission.getPrime(),
-							mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
-							mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
-							mission.getStatut());
-				}
+				MissionDto missionDto = new MissionDto();
+				missionDto = EntiteToDto.missionToDto(missionDto, mission);
 				missionsDto.add(missionDto);
 			}
 		}
 		return missionsDto;
 	}
 
-	/** GET : all trier par la date de fin */
+	/**
+	 * GET : all trier par la date de fin
+	 * missions/triDateFin?email=xxx@dev.fr&tri=true/false
+	 */
 	@GetMapping
 	@RequestMapping(value = "/triDateFin")
-	public List<MissionDto> missionsTirParDateFin(@RequestParam("email") String email,
+	public List<MissionDto> missionsTriParDateFin(@RequestParam("email") String email,
 			@RequestParam("tri") boolean tri) {
 
 		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
@@ -241,22 +221,70 @@ public class MissionController {
 			else if (tri == false)
 				missions = missionRepo.findByCollegueDateFinDesc(collegue.getId());
 			for (Mission mission : missions) {
-				MissionDto missionDto;
-				if (mission.getNature() != null) {
-					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(),
-							mission.getNature().getNom(), mission.getPrime(), mission.isValidation(),
-							mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
-							mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
-				} else {
-					missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), "", mission.getPrime(),
-							mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
-							mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(),
-							mission.getStatut());
-				}
+				MissionDto missionDto = new MissionDto();
+				missionDto = EntiteToDto.missionToDto(missionDto, mission);
 				missionsDto.add(missionDto);
 			}
 		}
 		return missionsDto;
+	}
+
+	/**
+	 * GET : all missions EN_ATTENTE_VALIDATION des subordonnes et tri par dates
+	 * missions/attente?email=xxx@dev.fr&tri=debut/fin&triDateDebut=true/false&triDateFin=true/false
+	 */
+	@GetMapping
+	@RequestMapping(value = "/attente")
+	public List<MissionDto> missionsEnAttente(@RequestParam("email") String email, @RequestParam("tri") String tri,
+			@RequestParam("triDateDebut") boolean triDateDebut, @RequestParam("triDateFin") boolean triDateFin) {
+		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
+		List<MissionDto> missionsDto = new ArrayList<>();
+		if (collegueOptional.isPresent()) {
+			Collegue collegue = collegueOptional.get();
+			List<Mission> missions = new ArrayList<>();
+			if (tri.equals(""))
+				missions = missionRepo.findAttenteByManager(collegue.getId());
+			else if (tri.equals("debut") && triDateDebut == false)
+				missions = missionRepo.findAttenteByManagerDateDebutAsc(collegue.getId());
+			else if (tri.equals("debut") && triDateDebut == true)
+				missions = missionRepo.findAttenteByManagerDateDebutDesc(collegue.getId());
+			else if (tri.equals("fin") && triDateFin == false)
+				missions = missionRepo.findAttenteByManagerDateFinAsc(collegue.getId());
+			else if (tri.equals("fin") && triDateFin == true)
+				missions = missionRepo.findAttenteByManagerDateFinDesc(collegue.getId());
+			for (Mission mission : missions) {
+				MissionDto missionDto = new MissionDto();
+				missionDto = EntiteToDto.missionToDto(missionDto, mission);
+				missionsDto.add(missionDto);
+			}
+		}
+		return missionsDto;
+	}
+
+	/**
+	 * GET : passe le statut a REJETEE si type = false passe le statut a VALIDEE si
+	 * type = true l'id de la mission dont il faut modifier le statut est recupere
+	 * validation?type=" + type + "&id=" + id
+	 */
+	@RequestMapping(value = "/validation")
+	public ResponseEntity<String> validationMission(@RequestParam("type") boolean type,
+			@RequestParam("id") Integer id) {
+		Optional<Mission> missionOptional = missionRepo.findById(id);
+		if (missionOptional.isPresent()) {
+			Mission mission = missionOptional.get();
+			if (type) {
+				mission.setStatut("VALIDEE");
+				missionRepo.save(mission);
+				return ResponseEntity.status(200).body("\"Mission validee\"");
+			} else {
+				mission.setStatut("REJETEE");
+				missionRepo.save(mission);
+				return ResponseEntity.status(200).body("\"Mission rejetee\"");
+			}
+		} else {
+			return ResponseEntity.status(404).body("\"Mission not found\"");
+		}
+
 	}
 
 }
