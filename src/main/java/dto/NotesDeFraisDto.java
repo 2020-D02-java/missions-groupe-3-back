@@ -11,6 +11,7 @@ import dev.domain.Nature;
  */
 public class NotesDeFraisDto {
 	
+	private String idNote;
 	private LocalDate dateDebut;
     private LocalDate dateFin;
     private String nature;
@@ -18,6 +19,7 @@ public class NotesDeFraisDto {
     private String arrivee;
     private String transport;
     private Integer frais;
+    private Integer idMission;
     
 	/*** Constructeur
 	 * @param dateDebut
@@ -28,9 +30,11 @@ public class NotesDeFraisDto {
 	 * @param transport
 	 * @param frais
 	 */
-	public NotesDeFraisDto(LocalDate dateDebut, LocalDate dateFin, String nature, String depart, String arrivee,
+	public NotesDeFraisDto(String idNote, int idMission,LocalDate dateDebut, LocalDate dateFin, String nature, String depart, String arrivee,
 			String transport, Integer frais) {
 		super();
+		this.idNote = idNote;
+		this.idMission = idMission;
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
 		this.nature = nature;
@@ -138,5 +142,32 @@ public class NotesDeFraisDto {
 		this.frais = frais;
 	}
 
+	/**Getter
+	 * @param idNote
+	 */
+	public String getIdNote() {
+		return idNote;
+	}
+
+	/**Setter
+	 * @return idNote
+	 */
+	public void setIdNote(String idNote) {
+		this.idNote = idNote;
+	}
+	
+	/**Setter
+	 * @return idMission
+	 */
+	public void setidMission(int idMission) {
+		this.idMission = idMission;
+	}
+
+	/**Getter
+	 * @param idNote
+	 */
+	public int getIdMission() {
+		return idMission;
+	}
 
 }
