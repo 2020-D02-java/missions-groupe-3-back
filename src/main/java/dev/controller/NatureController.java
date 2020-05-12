@@ -1,5 +1,7 @@
 package dev.controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,21 @@ public class NatureController {
 	public List<Nature> natures() {
 		List<Nature> natures = natureRepo.findAll();
 		return natures;
+	}
+
+	/** GET : all valides par date */
+	@GetMapping
+	@RequestMapping(value = "/valides")
+	public List<Nature> naturesValides() {
+		List<Nature> natures = natureRepo.findAll();
+		List<Nature> resultat = new ArrayList<>();
+		LocalDate date = LocalDate.now();
+		for (Nature nature : natures) {
+			if (nature.getDate_debut().compareTo(date) <= 0 && nature.getDate_fin().compareTo(date) >= 0) {
+				resultat.add(nature);
+			}
+		}
+		return resultat;
 	}
 
 }

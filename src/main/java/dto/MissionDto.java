@@ -2,6 +2,7 @@ package dto;
 
 import java.time.LocalDate;
 
+import dev.domain.Nature;
 import dev.domain.Prime;
 
 public class MissionDto {
@@ -9,7 +10,7 @@ public class MissionDto {
 
 	private long collegueId;
 
-	private String nature;
+	private Nature nature;
 
 	private Prime prime;
 
@@ -41,7 +42,7 @@ public class MissionDto {
 	 * @param ville_arrive
 	 * @param transport
 	 */
-	public MissionDto(Integer id, long collegueId, String nature, Prime prime, boolean validation, LocalDate date_debut,
+	public MissionDto(Integer id, long collegueId, Nature nature, Prime prime, boolean validation, LocalDate date_debut,
 			LocalDate date_fin, String ville_depart, String ville_arrive, String transport, String statut) {
 		super();
 		this.id = id;
@@ -55,6 +56,7 @@ public class MissionDto {
 		this.ville_arrive = ville_arrive;
 		this.transport = transport;
 		this.statut = statut;
+		this.nature = nature;
 	}
 
 	public MissionDto() {
@@ -102,7 +104,7 @@ public class MissionDto {
 	 * 
 	 * @return the nature
 	 */
-	public String getNature() {
+	public Nature getNature() {
 		return nature;
 	}
 
@@ -111,7 +113,7 @@ public class MissionDto {
 	 * 
 	 * @param nature the nature to set
 	 */
-	public void setNature(String nature) {
+	public void setNature(Nature nature) {
 		this.nature = nature;
 	}
 

@@ -127,7 +127,7 @@ public class MissionController {
 			} else {
 				return ResponseEntity.status(400).body("\"erreur:404collegueNonTrouve\"");
 			}
-			Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
+			Optional<Nature> natureOptional = natureRepo.findById(missionDto.getNature().getId());
 			if (natureOptional.isPresent()) {
 				mission.setNature(natureOptional.get());
 			}
@@ -161,7 +161,7 @@ public class MissionController {
 			if (missionOptional.isPresent()) {
 				Mission mission = missionOptional.get();
 				mission = DtoToEntite.dtoToMission(mission, missionDto);
-				Optional<Nature> natureOptional = natureRepo.findByNom(missionDto.getNature());
+				Optional<Nature> natureOptional = natureRepo.findById(missionDto.getNature().getId());
 				if (natureOptional.isPresent()) {
 					mission.setNature(natureOptional.get());
 				}
