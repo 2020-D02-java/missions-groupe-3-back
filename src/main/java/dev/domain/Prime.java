@@ -42,7 +42,19 @@ public class Prime {
 	 * 
 	 * @param date
 	 * @param montant
-	 * @param collegue
+	 */
+	public Prime(LocalDate date, Integer montant) {
+		super();
+		this.date = date;
+		this.montant = montant;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param date
+	 * @param montant
+	 * @param deduction
 	 */
 	public Prime(LocalDate date, Integer montant, Integer deduction) {
 		super();
