@@ -89,17 +89,20 @@ public class StartupListener {
 
 		col2.setManager(col3);
 		this.collegueRepo.save(col2);
-		Prime prime = new Prime(LocalDate.now(), 10000);
+		Prime prime = new Prime(LocalDate.now(), 10000, 0);
 		this.primeRepo.save(prime);
-		Nature nature = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.now(),
+		Nature nature = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.of(2020, 5, 1),
 				LocalDate.of(2021, 5, 1));
 		this.natureRepo.save(nature);
 
-		Nature nature2 = new Nature("Formation", false, false, 10000, 7, 50000, false, LocalDate.now(),
+		Nature nature2 = new Nature("Formation", false, false, 10000, 7, 50000, false, LocalDate.of(2020, 5, 1),
 				LocalDate.of(2021, 5, 1));
 		this.natureRepo.save(nature2);
-		Nature nature3 = new Nature("Expertise_technique", false, false, 10000, 7, 50000, false, LocalDate.now(),
-				LocalDate.of(2021, 5, 1));
+		Nature nature3 = new Nature("Expertise_technique", false, false, 10000, 7, 50000, false,
+				LocalDate.of(2020, 5, 1), LocalDate.of(2021, 5, 10));
+		this.natureRepo.save(nature3);
+		Nature nature4 = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.of(2019, 5, 1),
+				LocalDate.of(2020, 4, 30));
 		this.natureRepo.save(nature3);
 
 		Mission mission = new Mission(prime, false, LocalDate.of(2020, 05, 20), "Paris", "Lille", "train");
@@ -141,12 +144,8 @@ public class StartupListener {
 		LigneDeFrais ligneDeFrais = new LigneDeFrais("restaurant", 1500);
 		ligneDeFrais.setNote_de_frais(noteDeFrais);
 		ligneDeFraisRepo.save(ligneDeFrais);
-		
-		
-		
-		
-		// Création de deux utilisateurs
 
+		// Création de deux utilisateurs
 
 //		 prime = new Prime(LocalDate.now(), 15000);
 //		this.primeRepo.save(prime);

@@ -27,6 +27,8 @@ public class Prime {
 	@JoinColumn(name = "mission_id")
 	private Mission mission;
 
+	private Integer deduction;
+
 	/**
 	 * Constructor
 	 * 
@@ -42,10 +44,11 @@ public class Prime {
 	 * @param montant
 	 * @param collegue
 	 */
-	public Prime(LocalDate date, Integer montant) {
+	public Prime(LocalDate date, Integer montant, Integer deduction) {
 		super();
 		this.date = date;
 		this.montant = montant;
+		this.deduction = deduction;
 	}
 
 	/**
@@ -127,6 +130,24 @@ public class Prime {
 	 */
 	public void setMission(Mission mission) {
 		this.mission = mission;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the deduction
+	 */
+	public Integer getDeduction() {
+		return deduction;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param deduction the deduction to set
+	 */
+	public void setDeduction(Integer deduction) {
+		this.deduction = deduction;
 	}
 
 }

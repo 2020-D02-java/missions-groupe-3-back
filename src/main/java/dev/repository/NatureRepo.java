@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import dev.domain.Nature;
 
-public interface NatureRepo extends JpaRepository<Nature, Long> {
+public interface NatureRepo extends JpaRepository<Nature, Integer> {
 
 	Optional<Nature> findByNom(String nature);
 
