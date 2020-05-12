@@ -38,46 +38,41 @@ public class NatureController {
 	}
 
 	/** PATCH :  mis à jour d'une nature de mission **/
-
 	@PatchMapping
 	@RequestMapping(value="/modification")
 	@CrossOrigin
 	public ResponseEntity<Object> updateClient(@RequestBody Nature newNature){
 		Nature currentNature = natureRepo.findById(newNature.getId());
-
-		currentNature.setNom(newNature.getNom());
-		currentNature.setPrime(newNature.isPrime());
-		currentNature.setFacturation(newNature.isFacturation());
-		currentNature.setTjm(newNature.getTjm());
-		currentNature.setPourcentage(newNature.getPourcentage());
-		currentNature.setPlafond(newNature.getPlafond());
-		currentNature.setPlafond_depassable(newNature.isPlafond_depassable());
-
-		LocalDate newEndDate = LocalDate.now();
-		newEndDate = newEndDate.minusDays(1);
-		currentNature.setDate_fin(newEndDate);	
-
-
-		/**		Si la nature n'est pas utilisée:
-			On écrase la nature courante sans altérer sa date de début de validité.
-		 **/
 		List<Mission> missions = new ArrayList<>();
 		missions = missionRepo.findAll();
 		boolean natureUtilise = false;  
 		for (Mission mission : missions) {
-			
 			if (mission.getNature() == currentNature ) {	
 				natureUtilise = true;	
 			}
 		}
-
+		
 		if (natureUtilise == true ) {
-			natureRepo.save(newNature);
+			Nature tempNature = new Nature();
+
+			tempNature.setNom(newNature.getNom());
+			tempNature.setPrime(newNature.isPrime());
+			tempNature.setFacturation(newNature.isFacturation());
+			tempNature.setTjm(newNature.getTjm());
+			tempNature.setPourcentage(newNature.getPourcentage());
+			tempNature.setPlafond(newNature.getPlafond());
+			tempNature.setPlafond_depassable(newNature.isPlafond_depassable());
+			tempNature.setDate_debut(LocalDate.now());
+			
+			LocalDate newEndDate = LocalDate.now();
+			newEndDate = newEndDate.minusDays(1);
+			currentNature.setDate_fin(newEndDate);	
+			natureRepo.save(tempNature);
+			natureRepo.save(currentNature);
 		} else {
 			newNature.setDate_debut(currentNature.getDate_debut());
 			natureRepo.delete(currentNature);
 			natureRepo.save(newNature);
-
 		}
 
 		return ResponseEntity.status(200).body(newNature);

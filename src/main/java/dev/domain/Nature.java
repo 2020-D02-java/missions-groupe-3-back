@@ -141,6 +141,15 @@ public class Nature {
 	/**
 	 * Setter
 	 * 
+	 * @param id the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+	/**
+	 * Setter
+	 * 
 	 * @param tjm the tjm to set
 	 */
 	public void setTjm(Integer tjm) {
