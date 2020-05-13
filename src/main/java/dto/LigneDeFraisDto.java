@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import dev.domain.Nature;
 import dev.domain.NoteDeFrais;
 
 /**Structure modèlisant la ligne des notes de frais
@@ -16,7 +17,7 @@ public class LigneDeFraisDto {
     
     private LocalDate date;
     
-	private String nature;
+	private String type;
 
 	private Integer montant;
 	
@@ -31,10 +32,10 @@ public class LigneDeFraisDto {
 	 * @param nature
 	 * @param montant
 	 * @param note_de_frais	 */
-	public LigneDeFraisDto(LocalDate date, int id, String nature, Integer montant, NoteDeFrais note_de_frais) {
+	public LigneDeFraisDto(LocalDate date, int id, String type, Integer montant, NoteDeFrais note_de_frais) {
 		super();
 		this.date = date;
-		this.nature = nature;
+		this.type = type;
 		this.montant = montant;
 		this.note_de_frais = note_de_frais.getId();
 		this.id = id;
@@ -57,8 +58,8 @@ public class LigneDeFraisDto {
 	/**Getter
 	 * @return nature des frais
 	 */
-	public String getNature() {
-		return nature;
+	public String getType() {
+		return type;
 	}
 	
 	
@@ -72,8 +73,8 @@ public class LigneDeFraisDto {
 	/**Setter
 	 * @param nature des frais
 	 */
-	public void setNature(String nature) {
-		this.nature = nature;
+	public void setNature(String type) {
+		this.type = type;
 	}
 
 	/**Getter

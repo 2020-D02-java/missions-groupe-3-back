@@ -1,5 +1,6 @@
 package dev.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.domain.LigneDeFrais;
+import dev.domain.Nature;
 import dev.domain.NoteDeFrais;
 import dev.repository.LigneDeFraisRepo;
 import dev.repository.NoteDeFraisRepo;
@@ -42,13 +45,23 @@ public class LigneFraisController {
 		  List<LigneDeFraisDto> resultat = new ArrayList<>();
 		  for (LigneDeFrais ligne : ligneFrais ) {
 			  if (ligne.getNote_de_frais().getId() == Integer.parseInt(UUID.replace("UUID=", "")))
-			  resultat.add(new LigneDeFraisDto(ligne.getNote_de_frais().getDate_saisie(), ligne.getId(),ligne.getType(), ligne.getPrix(), ligne.getNote_de_frais()));
+			  resultat.add(new LigneDeFraisDto(ligne.getNote_de_frais().getDate_saisie(), ligne.getId(), ligne.getType(), ligne.getPrix(), ligne.getNote_de_frais()));
 		  }
 		  return resultat;		  
 	  }
 	
-	@PostMapping
+	@RequestMapping("/disponibilite")
+	public boolean rechercheDisponibilite(@RequestParam LocalDate date, String nature) {
+		  List<LigneDeFrais> ligneFrais =  this.ligneFraisRepo.findAll();
+		  for (LigneDeFrais ligne: ligneFrais) {
+			  if ((ligne.getDate() == date) && (ligne.getType() == nature)) {
+				  return false;
+			  }  
+		  } return true;
+	}
+
 	
+	@PostMapping
 	public void enregistrerLigneFrais(@RequestBody LigneDeFrais ligneDeFrais) {
 		this.ligneFraisRepo.save(ligneDeFrais);
 		
@@ -56,3 +69,22 @@ public class LigneFraisController {
 	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
