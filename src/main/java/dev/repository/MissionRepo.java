@@ -3,7 +3,6 @@ package dev.repository;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,8 +15,6 @@ public interface MissionRepo extends JpaRepository<Mission, Integer> {
 
 	@Query("SELECT m FROM Mission m WHERE m.collegue.id = ?1 AND m.date_debut = ?2 AND m.date_fin = ?3")
 	Mission findByCollegueAndDates(Long id, LocalDate date_debut, LocalDate date_fin);
-
-	List<Mission> findByCollegue(Collegue collegue, Sort by);
 
 	@Query("SELECT m FROM Mission m WHERE m.collegue.id = ?1 ORDER BY m.date_debut ASC")
 	List<Mission> findByCollegueDateDebutAsc(long id);
