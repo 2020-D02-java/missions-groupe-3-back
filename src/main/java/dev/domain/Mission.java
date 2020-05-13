@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Mission {
@@ -23,7 +24,7 @@ public class Mission {
 	@JoinColumn(name = "nature_id")
 	private Nature nature;
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "prime_id")
 	private Prime prime;
 

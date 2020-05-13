@@ -1,18 +1,10 @@
-package dev.domain;
+package dto;
 
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import dev.domain.Nature;
 
-@Entity
-public class Prime {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PrimeDtoComplet {
 	private Integer id;
 
 	private LocalDate date_debut;
@@ -23,47 +15,38 @@ public class Prime {
 
 	private Integer deduction;
 
-	@ManyToOne
-	@JoinColumn(name = "collegue_id")
-	private Collegue collegue;
+	private long collegue_id;
 
-	@ManyToOne
-	@JoinColumn(name = "nature_id")
 	private Nature nature;
 
 	/**
 	 * Constructor
 	 * 
 	 */
-	public Prime() {
+	public PrimeDtoComplet() {
 		super();
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param date
-	 * @param montant
-	 */
-	public Prime(LocalDate date, Integer montant) {
-		super();
-		this.date_debut = date;
-		this.montant = montant;
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param date
+	 * @param id
+	 * @param date_debut
+	 * @param date_fin
 	 * @param montant
 	 * @param deduction
+	 * @param collegue_id
+	 * @param mission_id
 	 */
-	public Prime(LocalDate date_debut, LocalDate date_fin, Integer montant, Integer deduction) {
+	public PrimeDtoComplet(Integer id, LocalDate date_debut, LocalDate date_fin, Integer montant, Integer deduction,
+			long collegue_id) {
 		super();
+		this.id = id;
 		this.date_debut = date_debut;
 		this.date_fin = date_fin;
 		this.montant = montant;
 		this.deduction = deduction;
+		this.collegue_id = collegue_id;
 	}
 
 	/**
@@ -76,9 +59,18 @@ public class Prime {
 	}
 
 	/**
+	 * Setter
+	 * 
+	 * @param id the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
 	 * Getter
 	 * 
-	 * @return the date
+	 * @return the date_debut
 	 */
 	public LocalDate getDate_debut() {
 		return date_debut;
@@ -87,10 +79,28 @@ public class Prime {
 	/**
 	 * Setter
 	 * 
-	 * @param date the date to set
+	 * @param date_debut the date_debut to set
 	 */
 	public void setDate_debut(LocalDate date_debut) {
 		this.date_debut = date_debut;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the date_fin
+	 */
+	public LocalDate getDate_fin() {
+		return date_fin;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param date_fin the date_fin to set
+	 */
+	public void setDate_fin(LocalDate date_fin) {
+		this.date_fin = date_fin;
 	}
 
 	/**
@@ -114,24 +124,6 @@ public class Prime {
 	/**
 	 * Getter
 	 * 
-	 * @return the collegue
-	 */
-	public Collegue getCollegue() {
-		return collegue;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param collegue the collegue to set
-	 */
-	public void setCollegue(Collegue collegue) {
-		this.collegue = collegue;
-	}
-
-	/**
-	 * Getter
-	 * 
 	 * @return the deduction
 	 */
 	public Integer getDeduction() {
@@ -150,19 +142,19 @@ public class Prime {
 	/**
 	 * Getter
 	 * 
-	 * @return the date_fin
+	 * @return the collegue_id
 	 */
-	public LocalDate getDate_fin() {
-		return date_fin;
+	public long getCollegue_id() {
+		return collegue_id;
 	}
 
 	/**
 	 * Setter
 	 * 
-	 * @param date_fin the date_fin to set
+	 * @param collegue_id the collegue_id to set
 	 */
-	public void setDate_fin(LocalDate date_fin) {
-		this.date_fin = date_fin;
+	public void setCollegue_id(long collegue_id) {
+		this.collegue_id = collegue_id;
 	}
 
 	/**
