@@ -46,5 +46,13 @@ public class LigneFraisController {
 		  }
 		  return resultat;		  
 	  }
+	
+	@PostMapping
+	
+	public void enregistrerLigneFrais(@RequestBody LigneDeFrais ligneDeFrais) {
+		this.ligneFraisRepo.save(ligneDeFrais);
+		
+	}
+	
 
 }

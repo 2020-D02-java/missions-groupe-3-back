@@ -18,6 +18,8 @@ public class Prime {
 	private LocalDate date;
 
 	private Integer montant;
+	
+	private Integer deduction;
 
 	@ManyToOne
 	@JoinColumn(name = "collegue_id")
@@ -35,6 +37,21 @@ public class Prime {
 		super();
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param deduction
+	 * @param date
+	 * @param montant
+	 * @param collegue
+	 */
+	public Prime(Integer deduction, LocalDate date, Integer montant) {
+		super();
+		this.deduction = deduction;
+		this.date = date;
+		this.montant = montant;
+	}
+	
 	/**
 	 * Constructor
 	 * 
