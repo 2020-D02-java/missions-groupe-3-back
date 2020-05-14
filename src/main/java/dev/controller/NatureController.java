@@ -42,7 +42,8 @@ public class NatureController {
 	@RequestMapping(value="/modification")
 	@CrossOrigin
 	public ResponseEntity<Object> updateClient(@RequestBody Nature newNature){
-		Nature currentNature = natureRepo.findById(newNature.getId());
+		Optional<Nature> natureOptionnal = natureRepo.findById(newNature.getId());
+		Nature currentNature = natureOptionnal.get();
 		List<Mission> missions = new ArrayList<>();
 		missions = missionRepo.findAll();
 		boolean natureUtilise = false;  

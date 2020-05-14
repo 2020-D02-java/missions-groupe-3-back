@@ -10,6 +10,6 @@ public interface NatureRepo extends JpaRepository<Nature, Long> {
 
 	Optional<Nature> findByNom(String nature);
 
-	Nature findById(Integer id);
+	Optional<Nature> findById(Integer id);
 
 }
