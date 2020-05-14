@@ -2,9 +2,13 @@ package dto;
 
 import java.time.LocalDate;
 
+import dev.domain.Nature;
+
 public class MissionDtoPost {
 
-	private String nature;
+	private Integer id;
+
+	private Nature nature;
 
 	private LocalDate date_debut;
 
@@ -17,6 +21,8 @@ public class MissionDtoPost {
 	private String transport;
 
 	private String collegue_email;
+
+	private String statut;
 
 	/**
 	 * Constructor
@@ -33,7 +39,7 @@ public class MissionDtoPost {
 	 * @param transport
 	 * @param collegue_email
 	 */
-	public MissionDtoPost(String nature, LocalDate date_debut, LocalDate date_fin, String ville_depart,
+	public MissionDtoPost(Integer id, Nature nature, LocalDate date_debut, LocalDate date_fin, String ville_depart,
 			String ville_arrivee, String transport, String collegue_email) {
 		super();
 		this.nature = nature;
@@ -48,9 +54,27 @@ public class MissionDtoPost {
 	/**
 	 * Getter
 	 * 
+	 * @return the id
+	 */
+	public Integer getId() {
+		return id;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param id the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
+	 * Getter
+	 * 
 	 * @return the nature
 	 */
-	public String getNature() {
+	public Nature getNature() {
 		return nature;
 	}
 
@@ -59,7 +83,7 @@ public class MissionDtoPost {
 	 * 
 	 * @param nature the nature to set
 	 */
-	public void setNature(String nature) {
+	public void setNature(Nature nature) {
 		this.nature = nature;
 	}
 
@@ -178,6 +202,24 @@ public class MissionDtoPost {
 	 */
 	public void setVille_arrivee(String ville_arrivee) {
 		this.ville_arrivee = ville_arrivee;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the statut
+	 */
+	public String getStatut() {
+		return statut;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param statut the statut to set
+	 */
+	public void setStatut(String statut) {
+		this.statut = statut;
 	}
 
 }

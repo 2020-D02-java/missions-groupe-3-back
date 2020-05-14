@@ -1,7 +1,7 @@
 package dev.controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +36,7 @@ public class NatureController {
 		List<Nature> natures = natureRepo.findAll();
 		return natures;
 	}
+
 
 	/** PATCH :  mis à jour d'une nature de mission **/
 	@PatchMapping
@@ -78,4 +79,22 @@ public class NatureController {
 
 		return ResponseEntity.status(200).body(newNature);
 	}
+
+
+	/** GET : all valides par date */
+	@GetMapping
+	@RequestMapping(value = "/valides")
+	public List<Nature> naturesValides() {
+		List<Nature> natures = natureRepo.findAll();
+		List<Nature> resultat = new ArrayList<>();
+		LocalDate date = LocalDate.now();
+		for (Nature nature : natures) {
+			if (nature.getDate_debut().compareTo(date) <= 0 && nature.getDate_fin().compareTo(date) >= 0) {
+				resultat.add(nature);
+			}
+		}
+		return resultat;
+	}
+
+
 }

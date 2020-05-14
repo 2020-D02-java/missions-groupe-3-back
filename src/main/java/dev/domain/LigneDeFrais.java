@@ -1,5 +1,7 @@
 package dev.domain;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +18,8 @@ public class LigneDeFrais {
 	private String type;
 
 	private Integer prix;
+	
+	private Integer noteFraisID;
 
 	@ManyToOne
 	@JoinColumn(name = "note_de_frais_id")
@@ -40,7 +44,12 @@ public class LigneDeFrais {
 		this.type = type;
 		this.prix = prix;
 	}
-
+	public LigneDeFrais(String type, Integer prix, Integer noteFraisID) {
+		super();
+		this.type = type;
+		this.prix = prix;
+		this.noteFraisID = noteFraisID;
+	}
 	/**
 	 * Getter
 	 * 
@@ -103,5 +112,6 @@ public class LigneDeFrais {
 	public void setNote_de_frais(NoteDeFrais note_de_frais) {
 		this.note_de_frais = note_de_frais;
 	}
+
 
 }
