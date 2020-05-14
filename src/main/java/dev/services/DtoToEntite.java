@@ -4,6 +4,9 @@ import dev.domain.Mission;
 import dto.MissionDto;
 import dto.MissionDtoPost;
 
+/**
+ * @author antoinethebault DtoToEntite
+ */
 public class DtoToEntite {
 	public static Mission dtoToMission(Mission mission, MissionDto missionDto) {
 		mission.setDate_debut(missionDto.getDate_debut());
