@@ -41,7 +41,7 @@ public class LoadPrime {
 			logger.log(Level.INFO, "LoadPrime : Aucune nature n'est definie pour la mission " + mission.getId());
 		if (mission.getDate_fin() == null)
 			logger.log(Level.INFO, "LoadPrime : Aucune date de fin n'est definie pour la mission " + mission.getId());
-		if (nature != null && mission.getDate_fin() != null) {
+		if (nature != null && mission.getDate_fin() != null && nature.isPrime()) {
 			long nbJours = Duration.between(mission.getDate_fin(), mission.getDate_debut()).toDays();
 			int TJM = nature.getTjm();
 			float pourcentage = nature.getPourcentage();

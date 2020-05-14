@@ -9,14 +9,22 @@ import dto.PrimeDtoComplet;
 public class EntiteToDto {
 
 	public static MissionDto missionToDto(MissionDto missionDto, Mission mission) {
-		if (mission.getNature() != null) {
+		if (mission.getNature() != null && mission.getPrime() != null) {
 			missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), mission.getNature(),
 					mission.getPrime().getId(), mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
 					mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
-		} else {
+		} else if (mission.getNature() == null && mission.getPrime() != null) {
 			missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), new Nature(),
 					mission.getPrime().getId(), mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
 					mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
+		} else if (mission.getPrime() == null) {
+			missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), mission.getNature(), -1,
+					mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
+					mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
+		} else {
+			missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), new Nature(), null,
+					mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
+					mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
 		}
 		return missionDto;
 	}
