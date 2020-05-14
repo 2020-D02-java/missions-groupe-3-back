@@ -6,13 +6,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Entity
 public class Nature {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
+	
+	
 	private String nom;
 
 	private boolean prime;
@@ -22,7 +25,7 @@ public class Nature {
 	private Integer tjm;
 
 	private float pourcentage;
-
+	
 	private Integer plafond;
 
 	private boolean plafond_depassable;
