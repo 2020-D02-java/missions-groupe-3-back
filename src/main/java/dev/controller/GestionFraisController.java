@@ -30,6 +30,7 @@ public class GestionFraisController {
 	
 	  @GetMapping
 	  public List<NotesDeFraisDto> gestionNotesDeFrais() {
+		  
 		  List<NoteDeFrais> notesFrais =  this.noteDeFraisRepo.findAll();
 		  List<LigneDeFrais> ligneFrais = this.ligneFraisRepo.findAll();
 

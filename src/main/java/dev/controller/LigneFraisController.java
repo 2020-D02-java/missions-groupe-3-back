@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.DemoApplication;
 import dev.domain.LigneDeFrais;
 import dev.domain.Nature;
 import dev.domain.NoteDeFrais;
@@ -44,9 +46,13 @@ public class LigneFraisController {
 		  List<LigneDeFrais> ligneFrais =  this.ligneFraisRepo.findAll();
 		  List<LigneDeFraisDto> resultat = new ArrayList<>();
 		  for (LigneDeFrais ligne : ligneFrais ) {
-			  if (ligne.getNote_de_frais().getId() == Integer.parseInt(UUID.replace("UUID=", "")))
+			  
+		    if (ligne.getNote_de_frais().getId() == Integer.parseInt(UUID.replace("UUID=", "")))
+			 // if (ligne.getNote_de_frais().getId() == 1)
+			  {
 			  resultat.add(new LigneDeFraisDto(ligne.getNote_de_frais().getDate_saisie(), ligne.getId(), ligne.getType(), ligne.getPrix(), ligne.getNote_de_frais()));
 		  }
+			  }
 		  return resultat;		  
 	  }
 	
@@ -63,9 +69,12 @@ public class LigneFraisController {
 	
 	@PostMapping
 	public void enregistrerLigneFrais(@RequestBody LigneDeFrais ligneDeFrais) {
-		this.ligneFraisRepo.save(ligneDeFrais);
 		
+		this.ligneFraisRepo.save(ligneDeFrais);	
+	
 	}
+
+	
 	
 
 }

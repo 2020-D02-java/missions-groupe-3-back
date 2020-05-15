@@ -58,10 +58,30 @@ public class PrimeController {
 		  for (Mission mission : missions)
 			  if (mission.getId() == idMission)
 				  
-				  resultat.add(new PrimeDto(mission.getPrime().getId(),mission.getPrime().getDate(),mission.getPrime().getMontant()));
+				  resultat.add(new PrimeDto(mission.getPrime().getId(), mission.getPrime().getDate(),mission.getPrime().getMontant()));
 		  
 		  return resultat;
 	  }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

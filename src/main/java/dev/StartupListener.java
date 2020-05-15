@@ -110,29 +110,7 @@ public class StartupListener {
 		ligneDeFraisRepo.save(ligneDeFrais);
 		
 		
-		
-		
-		// Création de deux utilisateurs
-
-
-//		 prime = new Prime(LocalDate.now(), 15000);
-//		this.primeRepo.save(prime);
-//		 nature = new Nature("Diplomatie", false, false, 10000, 7, 50000, false, LocalDate.now(),
-//				LocalDate.of(2021, 5, 1));
-//		this.natureRepo.save(nature);
-//		 mission = new Mission(prime, false, LocalDate.now(), "Casa", "Marseille", "train");
-//		mission.setCollegue(col2);
-//		mission.setNature(nature);
-//		mission.setPrime(prime);
-//		this.missionRepo.save(mission);
-//
-//		 NoteDeFrais noteDeFrais2 = new NoteDeFrais("facture2", 10000, LocalDate.now());
-//		noteDeFrais2.setMission(mission);
-//		noteDeFraisRepo.save(noteDeFrais2);
-//
-//		 ligneDeFrais = new LigneDeFrais("Hôtel", 150000);
-//		ligneDeFrais.setNote_de_frais(noteDeFrais);
-//		ligneDeFraisRepo.save(ligneDeFrais);
+	
 
 	}
 
