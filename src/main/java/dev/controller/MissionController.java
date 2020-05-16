@@ -26,6 +26,7 @@ import dev.repository.MissionRepo;
 import dev.repository.NatureRepo;
 import dev.services.DtoToEntite;
 import dev.services.EntiteToDto;
+import dev.services.LoadPrime;
 import dto.MissionDto;
 import dto.MissionDtoPost;
 
@@ -42,14 +43,17 @@ public class MissionController {
 	@Autowired
 	CollegueRepo collegueRepo;
 
+	@Autowired
+	LoadPrime loadPrime;
+
 	/** GET : all */
 	@GetMapping
 	public List<MissionDto> missions() {
+		EntiteToDto entiteToDto = new EntiteToDto(loadPrime);
 		List<Mission> missions = missionRepo.findAll();
 		List<MissionDto> missionsDto = new ArrayList<>();
 		for (Mission mission : missions) {
-			MissionDto missionDto = new MissionDto();
-			missionDto = EntiteToDto.missionToDto(missionDto, mission);
+			MissionDto missionDto = entiteToDto.missionToDto(mission);
 			missionsDto.add(missionDto);
 		}
 		return missionsDto;
@@ -61,14 +65,14 @@ public class MissionController {
 	@GetMapping
 	@RequestMapping(value = "/collegue")
 	public List<MissionDto> missionsCollegue(@RequestParam("email") String email) {
+		EntiteToDto entiteToDto = new EntiteToDto(loadPrime);
 		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
 		List<MissionDto> missionsDto = new ArrayList<>();
 		if (collegueOptional.isPresent()) {
 			Collegue collegue = collegueOptional.get();
 			List<Mission> missions = missionRepo.findByCollegue(collegue);
 			for (Mission mission : missions) {
-				MissionDto missionDto = new MissionDto();
-				missionDto = EntiteToDto.missionToDto(missionDto, mission);
+				MissionDto missionDto = entiteToDto.missionToDto(mission);
 				missionsDto.add(missionDto);
 			}
 		}
@@ -183,7 +187,7 @@ public class MissionController {
 	@RequestMapping(value = "/triDateDebut")
 	public List<MissionDto> missionsTriParDateDebut(@RequestParam("email") String email,
 			@RequestParam("tri") boolean tri) {
-
+		EntiteToDto entiteToDto = new EntiteToDto(loadPrime);
 		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
 		List<MissionDto> missionsDto = new ArrayList<>();
 		if (collegueOptional.isPresent()) {
@@ -194,8 +198,7 @@ public class MissionController {
 			else if (tri == false)
 				missions = missionRepo.findByCollegueDateDebutDesc(collegue.getId());
 			for (Mission mission : missions) {
-				MissionDto missionDto = new MissionDto();
-				missionDto = EntiteToDto.missionToDto(missionDto, mission);
+				MissionDto missionDto = entiteToDto.missionToDto(mission);
 				missionsDto.add(missionDto);
 			}
 		}
@@ -210,7 +213,7 @@ public class MissionController {
 	@RequestMapping(value = "/triDateFin")
 	public List<MissionDto> missionsTriParDateFin(@RequestParam("email") String email,
 			@RequestParam("tri") boolean tri) {
-
+		EntiteToDto entiteToDto = new EntiteToDto(loadPrime);
 		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
 		List<MissionDto> missionsDto = new ArrayList<>();
 		if (collegueOptional.isPresent()) {
@@ -221,8 +224,7 @@ public class MissionController {
 			else if (tri == false)
 				missions = missionRepo.findByCollegueDateFinDesc(collegue.getId());
 			for (Mission mission : missions) {
-				MissionDto missionDto = new MissionDto();
-				missionDto = EntiteToDto.missionToDto(missionDto, mission);
+				MissionDto missionDto = entiteToDto.missionToDto(mission);
 				missionsDto.add(missionDto);
 			}
 		}
@@ -237,6 +239,7 @@ public class MissionController {
 	@RequestMapping(value = "/attente")
 	public List<MissionDto> missionsEnAttente(@RequestParam("email") String email, @RequestParam("tri") String tri,
 			@RequestParam("triDateDebut") boolean triDateDebut, @RequestParam("triDateFin") boolean triDateFin) {
+		EntiteToDto entiteToDto = new EntiteToDto(loadPrime);
 		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
 		List<MissionDto> missionsDto = new ArrayList<>();
 		if (collegueOptional.isPresent()) {
@@ -253,8 +256,7 @@ public class MissionController {
 			else if (tri.equals("fin") && triDateFin == true)
 				missions = missionRepo.findAttenteByManagerDateFinDesc(collegue.getId());
 			for (Mission mission : missions) {
-				MissionDto missionDto = new MissionDto();
-				missionDto = EntiteToDto.missionToDto(missionDto, mission);
+				MissionDto missionDto = entiteToDto.missionToDto(mission);
 				missionsDto.add(missionDto);
 			}
 		}

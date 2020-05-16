@@ -90,17 +90,17 @@ public class StartupListener {
 		col2.setManager(col3);
 		this.collegueRepo.save(col2);
 
-		Nature nature = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.of(2020, 5, 1),
+		Nature nature = new Nature("Conseil", false, false, 0, 0, 0, false, LocalDate.of(2020, 5, 1),
 				LocalDate.of(2021, 5, 1));
 		this.natureRepo.save(nature);
 
-		Nature nature2 = new Nature("Formation", false, false, 10000, 7, 50000, false, LocalDate.of(2020, 5, 1),
+		Nature nature2 = new Nature("Formation", true, true, 100, 7, 0, true, LocalDate.of(2020, 5, 1),
 				LocalDate.of(2021, 5, 1));
 		this.natureRepo.save(nature2);
-		Nature nature3 = new Nature("Expertise_technique", false, false, 10000, 7, 50000, false,
-				LocalDate.of(2020, 5, 1), LocalDate.of(2021, 5, 10));
+		Nature nature3 = new Nature("Expertise_technique", true, true, 100, 8, 100, false, LocalDate.of(2020, 5, 1),
+				LocalDate.of(2021, 5, 10));
 		this.natureRepo.save(nature3);
-		Nature nature4 = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.of(2019, 5, 1),
+		Nature nature4 = new Nature("Conseil", false, false, 100, 7, 500, false, LocalDate.of(2019, 5, 1),
 				LocalDate.of(2020, 4, 30));
 		this.natureRepo.save(nature4);
 
@@ -114,35 +114,33 @@ public class StartupListener {
 		prime2.setCollegue(col2);
 		this.primeRepo.save(prime2);
 
-		Prime prime3 = new Prime(LocalDate.of(2019, 5, 1), LocalDate.of(2019, 5, 1), 22000, 0);
+		Prime prime3 = new Prime(LocalDate.of(2019, 5, 2), LocalDate.of(2019, 5, 2), 22000, 0);
 		prime3.setNature(nature2);
 		prime3.setCollegue(col2);
 		this.primeRepo.save(prime3);
 
-		Mission mission = new Mission(prime, false, LocalDate.of(2020, 05, 20), "Paris", "Lille", "train");
-		mission.setDate_fin(LocalDate.of(2020, 05, 25));
+		Mission mission = new Mission(prime, false, LocalDate.of(2019, 5, 1), "Paris", "Lille", "train");
+		mission.setDate_fin(LocalDate.of(2019, 5, 1));
 		mission.setCollegue(col2);
 		mission.setNature(nature);
 		mission.setStatut("INITIALE");
 		this.missionRepo.save(mission);
 
-		Mission mission2 = new Mission(prime2, false, LocalDate.of(2020, 05, 26), "Paris", "Lyon", "train");
-		mission2.setDate_fin(LocalDate.of(2020, 05, 27));
+		Mission mission2 = new Mission(prime2, false, LocalDate.of(2019, 05, 2), "Paris", "Lyon", "train");
+		mission2.setDate_fin(LocalDate.of(2019, 05, 2));
 		mission2.setCollegue(col2);
 		mission2.setNature(nature);
-		mission2.setPrime(prime);
 		mission2.setStatut("VALIDEE");
 		this.missionRepo.save(mission2);
 
-		Mission mission3 = new Mission(prime3, false, LocalDate.of(2020, 05, 28), "Paris", "Bordeaux", "covoiturage");
-		mission3.setDate_fin(LocalDate.of(2020, 05, 28));
+		Mission mission3 = new Mission(prime3, false, LocalDate.of(2020, 04, 28), "Paris", "Bordeaux", "covoiturage");
+		mission3.setDate_fin(LocalDate.of(2020, 04, 28));
 		mission3.setCollegue(col2);
 		mission3.setNature(nature2);
-		mission3.setPrime(prime);
 		mission3.setStatut("EN_ATTENTE_VALIDATION");
 		this.missionRepo.save(mission3);
 
-		Mission mission4 = new Mission(prime, false, LocalDate.of(2020, 05, 29), "Paris", "Nantes", "covoiturage");
+		Mission mission4 = new Mission(null, false, LocalDate.of(2020, 05, 29), "Paris", "Nantes", "covoiturage");
 		mission4.setDate_fin(LocalDate.of(2020, 05, 29));
 		mission4.setCollegue(col2);
 		mission4.setNature(nature3);
