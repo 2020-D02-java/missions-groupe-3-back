@@ -96,6 +96,7 @@ public class PrimeController {
 			else if (tri_date.equals("false"))
 				primes = primeRepo.findByCollegueDesc(collegue);
 			for (Prime prime : primes) {
+				System.out.println(prime.getDate_debut() + " " + prime.getId());
 				int anneePrime = prime.getDate_debut().getYear();
 				if (anneePrime == annee)
 					primesDto.add(EntiteToDto.primesToDto(prime));
