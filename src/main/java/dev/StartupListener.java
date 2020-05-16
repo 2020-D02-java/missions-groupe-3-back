@@ -90,17 +90,17 @@ public class StartupListener {
 		col2.setManager(col3);
 		this.collegueRepo.save(col2);
 
-		Nature nature = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.of(2020, 5, 1),
+		Nature nature = new Nature("Conseil", false, true, 10000, 0, 50000, false, LocalDate.of(2020, 5, 1),
 				LocalDate.of(2021, 5, 1));
 		this.natureRepo.save(nature);
 
-		Nature nature2 = new Nature("Formation", false, false, 10000, 7, 50000, false, LocalDate.of(2020, 5, 1),
+		Nature nature2 = new Nature("Formation", true, true, 10000, 2, 50000, false, LocalDate.of(2020, 5, 1),
 				LocalDate.of(2021, 5, 1));
 		this.natureRepo.save(nature2);
-		Nature nature3 = new Nature("Expertise_technique", false, false, 10000, 7, 50000, false,
+		Nature nature3 = new Nature("Expertise_technique", false, true, 100, 0, 50000, false,
 				LocalDate.of(2020, 5, 1), LocalDate.of(2021, 5, 10));
 		this.natureRepo.save(nature3);
-		Nature nature4 = new Nature("Conseil", false, false, 10000, 7, 50000, false, LocalDate.of(2019, 5, 1),
+		Nature nature4 = new Nature("Conseil", true, true, 950, 4, 50000, false, LocalDate.of(2019, 5, 1),
 				LocalDate.of(2020, 4, 30));
 		this.natureRepo.save(nature4);
 
