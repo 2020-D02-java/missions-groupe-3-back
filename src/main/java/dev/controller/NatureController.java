@@ -1,7 +1,6 @@
 package dev.controller;
 
 import java.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,24 +47,23 @@ public class NatureController {
 		return ResponseEntity.status(200).body(nature);
 	}
 
-
-	/** PATCH :  mis à jour d'une nature de mission **/
+	/** PATCH : mis à jour d'une nature de mission **/
 	@PatchMapping
-	@RequestMapping(value="/modification")
+	@RequestMapping(value = "/modification")
 	@CrossOrigin
-	public ResponseEntity<Object> updateClient(@RequestBody Nature newNature){
+	public ResponseEntity<Object> updateClient(@RequestBody Nature newNature) {
 		Optional<Nature> natureOptionnal = natureRepo.findById(newNature.getId());
 		Nature currentNature = natureOptionnal.get();
 		List<Mission> missions = new ArrayList<>();
 		missions = missionRepo.findAll();
-		boolean natureUtilise = false;  
+		boolean natureUtilise = false;
 		for (Mission mission : missions) {
-			if (mission.getNature() == currentNature ) {	
-				natureUtilise = true;	
+			if (mission.getNature() == currentNature) {
+				natureUtilise = true;
 			}
 		}
-		
-		if (natureUtilise == true ) {
+
+		if (natureUtilise == true) {
 			Nature tempNature = new Nature();
 
 			tempNature.setNom(newNature.getNom());
@@ -76,10 +74,10 @@ public class NatureController {
 			tempNature.setPlafond(newNature.getPlafond());
 			tempNature.setPlafond_depassable(newNature.isPlafond_depassable());
 			tempNature.setDate_debut(LocalDate.now());
-			
+
 			LocalDate newEndDate = LocalDate.now();
 			newEndDate = newEndDate.minusDays(1);
-			currentNature.setDate_fin(newEndDate);	
+			currentNature.setDate_fin(newEndDate);
 			natureRepo.save(tempNature);
 			natureRepo.save(currentNature);
 		} else {
@@ -91,7 +89,6 @@ public class NatureController {
 		return ResponseEntity.status(200).body(newNature);
 	}
 
-
 	/** GET : all valides par date */
 	@GetMapping
 	@RequestMapping(value = "/valides")
@@ -100,12 +97,13 @@ public class NatureController {
 		List<Nature> resultat = new ArrayList<>();
 		LocalDate date = LocalDate.now();
 		for (Nature nature : natures) {
-			if (nature.getDate_debut().compareTo(date) <= 0 && nature.getDate_fin().compareTo(date) >= 0) {
+			if (nature.getDate_debut().compareTo(date) <= 0 && nature.getDate_fin() == null)
+				resultat.add(nature);
+			else if (nature.getDate_debut().compareTo(date) <= 0 && nature.getDate_fin().compareTo(date) >= 0) {
 				resultat.add(nature);
 			}
 		}
 		return resultat;
 	}
-
 
 }
