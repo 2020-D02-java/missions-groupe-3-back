@@ -90,16 +90,16 @@ public class PrimeController {
 			Collegue collegue = collegueOptional.get();
 			List<Prime> primes = new ArrayList<>();
 			if (tri_date.equals(""))
-				primes = primeRepo.findByCollegue(collegue);
+				primes = primeRepo.findByCollegueValidee(collegue);
 			else if (tri_date.equals("true"))
-				primes = primeRepo.findByCollegueAsc(collegue);
+				primes = primeRepo.findByCollegueAscValidee(collegue);
 			else if (tri_date.equals("false"))
-				primes = primeRepo.findByCollegueDesc(collegue);
+				primes = primeRepo.findByCollegueDescValidee(collegue);
 			for (Prime prime : primes) {
-				System.out.println(prime.getDate_debut() + " " + prime.getId());
 				int anneePrime = prime.getDate_debut().getYear();
-				if (anneePrime == annee)
+				if (anneePrime == annee) {
 					primesDto.add(EntiteToDto.primesToDto(prime));
+				}
 			}
 		}
 		return primesDto;
