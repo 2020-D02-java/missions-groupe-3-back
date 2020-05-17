@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import dev.domain.Collegue;
 import dev.domain.Mission;
+import dev.domain.Prime;
 
 public interface MissionRepo extends JpaRepository<Mission, Integer> {
 
@@ -42,5 +43,7 @@ public interface MissionRepo extends JpaRepository<Mission, Integer> {
 
 	@Query("SELECT m FROM Mission m, Collegue c WHERE m.statut = 'EN_ATTENTE_VALIDATION' AND m.collegue.id = c.id AND c.manager.id = ?1 ORDER BY m.date_fin DESC")
 	List<Mission> findAttenteByManagerDateFinDesc(long id);
+
+	List<Mission> findByPrime(Prime prime);
 
 }

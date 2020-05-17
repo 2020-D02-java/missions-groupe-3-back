@@ -123,7 +123,7 @@ public class StartupListener {
 		mission.setDate_fin(LocalDate.of(2019, 5, 1));
 		mission.setCollegue(col2);
 		mission.setNature(nature);
-		mission.setStatut("INITIALE");
+		mission.setStatut("VALIDEE");
 		this.missionRepo.save(mission);
 
 		Mission mission2 = new Mission(prime2, false, LocalDate.of(2019, 05, 2), "Paris", "Lyon", "train");
