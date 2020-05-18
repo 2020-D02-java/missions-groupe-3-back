@@ -132,7 +132,9 @@ public class MissionController {
 	@PostMapping
 	@CrossOrigin
 	public ResponseEntity<Object> creationMission(@RequestBody MissionDtoPost missionDto) {
-		if (missionDto.getDate_debut() != null) {
+		// on verifie si la mission n'est pas deja creee
+		Optional<Mission> result = missionRepo.findByDate_debut(missionDto.getDate_debut());
+		if (missionDto.getDate_debut() != null && result.isEmpty()) {
 			Mission mission = new Mission();
 			mission = DtoToEntite.dtoPostToMission(mission, missionDto);
 			Optional<Collegue> collegueOptionnal = collegueRepo.findByEmail(missionDto.getCollegue_email());
@@ -147,8 +149,10 @@ public class MissionController {
 			}
 			missionRepo.save(mission);
 			return ResponseEntity.status(200).body(missionDto);
-		} else {
+		} else if (missionDto.getDate_debut() == null) {
 			return ResponseEntity.status(400).body("\"Requete vide\"");
+		} else {
+			return ResponseEntity.status(400).body("\"Doublon\"");
 		}
 	}
 

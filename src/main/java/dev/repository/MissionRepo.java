@@ -2,6 +2,7 @@ package dev.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,5 +46,8 @@ public interface MissionRepo extends JpaRepository<Mission, Integer> {
 	List<Mission> findAttenteByManagerDateFinDesc(long id);
 
 	List<Mission> findByPrime(Prime prime);
+
+	@Query("SELECT m FROM Mission m WHERE m.date_debut = ?1")
+	Optional<Mission> findByDate_debut(LocalDate date_debut);
 
 }
