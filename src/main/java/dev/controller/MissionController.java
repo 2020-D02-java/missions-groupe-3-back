@@ -19,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.domain.Collegue;
+import dev.domain.LigneDeFrais;
 import dev.domain.Mission;
 import dev.domain.Nature;
+import dev.domain.NoteDeFrais;
 import dev.repository.CollegueRepo;
+import dev.repository.LigneDeFraisRepo;
 import dev.repository.MissionRepo;
 import dev.repository.NatureRepo;
+import dev.repository.NoteDeFraisRepo;
 import dev.services.DtoToEntite;
 import dev.services.EntiteToDto;
 import dev.services.LoadPrime;
@@ -42,6 +46,12 @@ public class MissionController {
 
 	@Autowired
 	CollegueRepo collegueRepo;
+
+	@Autowired
+	NoteDeFraisRepo noteDeFraisRepo;
+
+	@Autowired
+	LigneDeFraisRepo ligneDeFraisRepo;
 
 	@Autowired
 	LoadPrime loadPrime;
@@ -148,7 +158,18 @@ public class MissionController {
 	@CrossOrigin
 	public String missionDisponible(@RequestParam("id") Integer id) {
 		Optional<Mission> mission = missionRepo.findById(id);
+		// si une note de frais est presente il faut d'abord la supprimer avant de
+		// pouvoir supprimer la mission
+		// et il faut supprimer les lignes de frais associes
 		if (mission.isPresent()) {
+			Optional<NoteDeFrais> noteDeFrais = noteDeFraisRepo.findByMission(mission.get());
+			if (noteDeFrais.isPresent()) {
+				List<LigneDeFrais> lignesDeFrais = ligneDeFraisRepo.findByNote_de_frais(noteDeFrais.get());
+				for (LigneDeFrais ligneDeFrais : lignesDeFrais) {
+					ligneDeFraisRepo.delete(ligneDeFrais);
+				}
+				noteDeFraisRepo.delete(noteDeFrais.get());
+			}
 			missionRepo.delete(mission.get());
 			return "\"mission supprimee\"";
 		} else {
