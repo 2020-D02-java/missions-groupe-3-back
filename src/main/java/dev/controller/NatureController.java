@@ -8,10 +8,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.domain.Mission;
@@ -34,6 +37,40 @@ public class NatureController {
 	public List<Nature> natures() {
 		List<Nature> natures = natureRepo.findAll();
 		return natures;
+	}
+	
+	
+	/** DELETE : suppression d'une nature **/
+	
+	@DeleteMapping
+	@RequestMapping(value="/delete")
+	@CrossOrigin
+	public ResponseEntity<String> suppresionNature(@RequestParam("id") Integer id) {
+		List<Mission> missions = missionRepo.findAll();
+		Optional<Nature> nature = natureRepo.findById(id);
+		
+		for (Mission mission : missions) {
+			if (mission.getNature() == nature.get()) {
+				return ResponseEntity.status(200).body("\"La nature est déjà utilisée, impossible de la supprimer\"");
+			}
+		}
+		
+		if (nature.isPresent()) {
+			natureRepo.delete(nature.get());
+			return  ResponseEntity.status(200).body("\"La supression a bien été enregistrée\"");
+		}
+		return ResponseEntity.status(400).body("\"La nature est introuvable\"");
+	}
+	
+	
+	/** POST : ajout d'une nature **/
+	
+	@PostMapping
+	@RequestMapping(value="/ajout")
+	public ResponseEntity<Object> creationNature(@RequestBody Nature nature) {
+		nature.setDate_debut(LocalDate.now());
+		natureRepo.save(nature);
+		return ResponseEntity.status(200).body(nature);
 	}
 
 	/** PATCH : mis à jour d'une nature de mission **/
