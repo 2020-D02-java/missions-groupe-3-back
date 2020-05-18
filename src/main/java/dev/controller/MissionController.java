@@ -164,7 +164,7 @@ public class MissionController {
 		if (mission.isPresent()) {
 			Optional<NoteDeFrais> noteDeFrais = noteDeFraisRepo.findByMission(mission.get());
 			if (noteDeFrais.isPresent()) {
-				List<LigneDeFrais> lignesDeFrais = ligneDeFraisRepo.findByNoteFraisID(noteDeFrais.get().getId());
+				List<LigneDeFrais> lignesDeFrais = ligneDeFraisRepo.findByNote_de_frais(noteDeFrais.get());
 				for (LigneDeFrais ligneDeFrais : lignesDeFrais) {
 					ligneDeFraisRepo.delete(ligneDeFrais);
 				}
