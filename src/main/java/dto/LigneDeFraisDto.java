@@ -1,6 +1,8 @@
 package dto;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,20 +27,25 @@ public class LigneDeFraisDto {
 	
 	@ManyToOne
 	@JoinColumn(name = "note_de_frais_id")
-	private Integer note_de_frais;
+	private int note_de_frais;
 
 	/**Constructeur
 	 * @param date
 	 * @param nature
 	 * @param montant
 	 * @param note_de_frais	 */
-	public LigneDeFraisDto(LocalDate date, int id, String type, Integer montant, NoteDeFrais note_de_frais) {
+	public LigneDeFraisDto(String date, int id, String type, Integer montant, int note_de_frais) {
 		super();
-		this.date = date;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+		this.date = LocalDate.parse(date,formatter);
 		this.type = type;
 		this.montant = montant;
-		this.note_de_frais = note_de_frais.getId();
+		this.note_de_frais = note_de_frais;
 		this.id = id;
+	}
+	public LigneDeFraisDto() {
+		super();
+
 	}
 
 	/**Getter
@@ -94,15 +101,15 @@ public class LigneDeFraisDto {
 	/**Getter
 	 * @return
 	 */
-	public Integer getNote_de_frais() {
-		return note_de_frais;
+	public int getNote_de_frais() {
+		return this.note_de_frais;
 	}
 
 	/**Setter
 	 * @param note_de_frais
 	 */
-	public void setNote_de_frais(NoteDeFrais note_de_frais) {
-		this.note_de_frais = note_de_frais.getId();
+	public void setNote_de_frais(int note_de_frais) {
+		this.note_de_frais = note_de_frais;
 	}
 	
 	

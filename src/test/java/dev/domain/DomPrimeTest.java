@@ -19,12 +19,6 @@ class DomPrimeTest {
 		prime = new Prime(LocalDate.now(), 10000);
 		collegue = new Collegue("collegue", "prenom", "email", "superpass");
 		prime.setCollegue(collegue);
-		prime.setMission(mission);
-	}
-
-	@Test
-	void testMission() {
-		assertThat(prime.getMission()).isEqualTo(mission);
 	}
 
 	@Test

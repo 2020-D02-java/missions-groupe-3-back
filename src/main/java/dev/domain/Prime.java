@@ -15,10 +15,13 @@ public class Prime {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	private LocalDate date;
+	private LocalDate date_debut;
+
+	private LocalDate date_fin;
 
 	private Integer montant;
 	
+
 	private Integer deduction;
 
 	@ManyToOne
@@ -26,8 +29,8 @@ public class Prime {
 	private Collegue collegue;
 
 	@ManyToOne
-	@JoinColumn(name = "mission_id")
-	private Mission mission;
+	@JoinColumn(name = "nature_id")
+	private Nature nature;
 
 	/**
 	 * Constructor
@@ -48,7 +51,7 @@ public class Prime {
 	public Prime(Integer deduction, LocalDate date, Integer montant) {
 		super();
 		this.deduction = deduction;
-		this.date = date;
+		this.date_debut= date;
 		this.montant = montant;
 	}
 	
@@ -57,12 +60,26 @@ public class Prime {
 	 * 
 	 * @param date
 	 * @param montant
-	 * @param collegue
 	 */
 	public Prime(LocalDate date, Integer montant) {
 		super();
-		this.date = date;
+		this.date_debut = date;
 		this.montant = montant;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param date
+	 * @param montant
+	 * @param deduction
+	 */
+	public Prime(LocalDate date_debut, LocalDate date_fin, Integer montant, Integer deduction) {
+		super();
+		this.date_debut = date_debut;
+		this.date_fin = date_fin;
+		this.montant = montant;
+		this.deduction = deduction;
 	}
 
 	/**
@@ -79,8 +96,8 @@ public class Prime {
 	 * 
 	 * @return the date
 	 */
-	public LocalDate getDate() {
-		return date;
+	public LocalDate getDate_debut() {
+		return date_debut;
 	}
 
 	/**
@@ -88,8 +105,8 @@ public class Prime {
 	 * 
 	 * @param date the date to set
 	 */
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setDate_debut(LocalDate date_debut) {
+		this.date_debut = date_debut;
 	}
 
 	/**
@@ -131,19 +148,55 @@ public class Prime {
 	/**
 	 * Getter
 	 * 
-	 * @return the mission
+	 * @return the deduction
 	 */
-	public Mission getMission() {
-		return mission;
+	public Integer getDeduction() {
+		return deduction;
 	}
 
 	/**
 	 * Setter
 	 * 
-	 * @param mission the mission to set
+	 * @param deduction the deduction to set
 	 */
-	public void setMission(Mission mission) {
-		this.mission = mission;
+	public void setDeduction(Integer deduction) {
+		this.deduction = deduction;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the date_fin
+	 */
+	public LocalDate getDate_fin() {
+		return date_fin;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param date_fin the date_fin to set
+	 */
+	public void setDate_fin(LocalDate date_fin) {
+		this.date_fin = date_fin;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the nature
+	 */
+	public Nature getNature() {
+		return nature;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param nature the nature to set
+	 */
+	public void setNature(Nature nature) {
+		this.nature = nature;
 	}
 
 }

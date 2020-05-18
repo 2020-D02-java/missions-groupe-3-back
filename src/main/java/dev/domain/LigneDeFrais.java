@@ -25,7 +25,7 @@ public class LigneDeFrais {
 
 	@ManyToOne
 	@JoinColumn(name = "note_de_frais_id")
-	private NoteDeFrais note_de_frais;
+	private NoteDeFrais noteDeFrais;
 
 	/**
 	 * Constructor
@@ -41,8 +41,9 @@ public class LigneDeFrais {
 	 * @param type
 	 * @param prix
 	 */
-	public LigneDeFrais(String type, Integer prix) {
+	public LigneDeFrais(Integer id, String type, Integer prix) {
 		super();
+		this.id = id;
 		this.type = type;
 		this.prix = prix;
 	}
@@ -103,7 +104,7 @@ public class LigneDeFrais {
 	 * @return the note_de_frais
 	 */
 	public NoteDeFrais getNote_de_frais() {
-		return note_de_frais;
+		return noteDeFrais;
 	}
 
 	/**
@@ -112,7 +113,7 @@ public class LigneDeFrais {
 	 * @param note_de_frais the note_de_frais to set
 	 */
 	public void setNote_de_frais(NoteDeFrais note_de_frais) {
-		this.note_de_frais = note_de_frais;
+		this.noteDeFrais = note_de_frais;
 	}
 
 	/**Setter
