@@ -134,7 +134,7 @@ public class MissionController {
 	public ResponseEntity<Object> creationMission(@RequestBody MissionDtoPost missionDto) {
 		// on verifie si la mission n'est pas deja creee
 		Optional<Mission> result = missionRepo.findByDate_debut(missionDto.getDate_debut());
-		if (missionDto.getDate_debut() != null && result.isEmpty()) {
+		if (missionDto.getDate_debut() != null && !result.isPresent()) {
 			Mission mission = new Mission();
 			mission = DtoToEntite.dtoPostToMission(mission, missionDto);
 			Optional<Collegue> collegueOptionnal = collegueRepo.findByEmail(missionDto.getCollegue_email());
