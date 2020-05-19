@@ -19,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.domain.Collegue;
+import dev.domain.LigneDeFrais;
 import dev.domain.Mission;
 import dev.domain.Nature;
+import dev.domain.NoteDeFrais;
 import dev.repository.CollegueRepo;
+import dev.repository.LigneDeFraisRepo;
 import dev.repository.MissionRepo;
 import dev.repository.NatureRepo;
+import dev.repository.NoteDeFraisRepo;
 import dev.services.DtoToEntite;
 import dev.services.EntiteToDto;
 import dev.services.LoadPrime;
@@ -42,6 +46,12 @@ public class MissionController {
 
 	@Autowired
 	CollegueRepo collegueRepo;
+
+	@Autowired
+	NoteDeFraisRepo noteDeFraisRepo;
+
+	@Autowired
+	LigneDeFraisRepo ligneDeFraisRepo;
 
 	@Autowired
 	LoadPrime loadPrime;
@@ -122,7 +132,9 @@ public class MissionController {
 	@PostMapping
 	@CrossOrigin
 	public ResponseEntity<Object> creationMission(@RequestBody MissionDtoPost missionDto) {
-		if (missionDto.getDate_debut() != null) {
+		// on verifie si la mission n'est pas deja creee
+		Optional<Mission> result = missionRepo.findByDate_debut(missionDto.getDate_debut());
+		if (missionDto.getDate_debut() != null && !result.isPresent()) {
 			Mission mission = new Mission();
 			mission = DtoToEntite.dtoPostToMission(mission, missionDto);
 			Optional<Collegue> collegueOptionnal = collegueRepo.findByEmail(missionDto.getCollegue_email());
@@ -137,8 +149,10 @@ public class MissionController {
 			}
 			missionRepo.save(mission);
 			return ResponseEntity.status(200).body(missionDto);
-		} else {
+		} else if (missionDto.getDate_debut() == null) {
 			return ResponseEntity.status(400).body("\"Requete vide\"");
+		} else {
+			return ResponseEntity.status(400).body("\"Doublon\"");
 		}
 	}
 
@@ -148,7 +162,18 @@ public class MissionController {
 	@CrossOrigin
 	public String missionDisponible(@RequestParam("id") Integer id) {
 		Optional<Mission> mission = missionRepo.findById(id);
+		// si une note de frais est presente il faut d'abord la supprimer avant de
+		// pouvoir supprimer la mission
+		// et il faut supprimer les lignes de frais associes
 		if (mission.isPresent()) {
+			Optional<NoteDeFrais> noteDeFrais = noteDeFraisRepo.findByMission(mission.get());
+			if (noteDeFrais.isPresent()) {
+				List<LigneDeFrais> lignesDeFrais = ligneDeFraisRepo.findByNote_de_frais(noteDeFrais.get());
+				for (LigneDeFrais ligneDeFrais : lignesDeFrais) {
+					ligneDeFraisRepo.delete(ligneDeFrais);
+				}
+				noteDeFraisRepo.delete(noteDeFrais.get());
+			}
 			missionRepo.delete(mission.get());
 			return "\"mission supprimee\"";
 		} else {
