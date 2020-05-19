@@ -42,22 +42,14 @@ public class GestionFraisController {
 		this.noteDeFraisRepo = noteDeFraisRepo;
 		this.ligneFraisRepo = ligneFraiRepo;
 	}
-
+		//Get: methode renvoie les différents notes de frais 
 	@GetMapping
 	public List<NotesDeFraisDto> gestionNotesDeFrais() {
 
 		List<NoteDeFrais> notesFrais = this.noteDeFraisRepo.findAll();
-//		  List<LigneDeFrais> ligneFrais = this.ligneFraisRepo.findAll();
 
 		List<NotesDeFraisDto> resultat = new ArrayList<>();
-//		  Integer sommeFrais = 0;
 		for (NoteDeFrais note : notesFrais) {
-//			  for (LigneDeFrais ligne : ligneFrais)
-
-//				  if (note.getId() == ligne.getNote_de_frais().getId())
-//					  sommeFrais += ligne.getPrix();
-//			  }
-
 			resultat.add(new NotesDeFraisDto(note.getId() + "", note.getMission().getId(),
 					note.getMission().getDate_debut(), note.getMission().getDate_fin(),
 					note.getMission().getNature().getNom(), note.getMission().getVille_depart(),
@@ -66,6 +58,9 @@ public class GestionFraisController {
 
 		return resultat;
 	}
+	
+	
+	//Get: methode renvoie une  note de frais grace à son identifiant  
 
 	@GetMapping("/id")
 
