@@ -1,6 +1,7 @@
 package dev.controller;
 
 import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -124,6 +125,7 @@ public class NatureController {
 			if (nature.getDate_debut().compareTo(date) <= 0 && nature.getDate_fin() == null)
 				resultat.add(nature);
 			else if (nature.getDate_debut().compareTo(date) <= 0 && nature.getDate_fin().compareTo(date) >= 0) {
+
 				resultat.add(nature);
 			}
 		}

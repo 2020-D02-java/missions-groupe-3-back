@@ -1,5 +1,6 @@
 package dev.services;
 
+import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ import dev.repository.PrimeRepo;
  *         déduction = somme des frais - (plafond de frais)*(nombre de jours de
  *         la mission)
  */
+
 @Service
 @Transactional
 public class LoadPrime {
@@ -53,12 +55,15 @@ public class LoadPrime {
 
 	public Mission loadPrime(Mission mission) {
 		Nature nature = mission.getNature();
+		
 		int montant = 0;
 		int deduction = 0;
+		
 		if (nature == null)
 			logger.log(Level.INFO, "LoadPrime : Aucune nature n'est definie pour la mission " + mission.getId());
 		if (mission.getDate_fin() == null)
 			logger.log(Level.INFO, "LoadPrime : Aucune date de fin n'est definie pour la mission " + mission.getId());
+
 		if (nature != null && mission.getDate_fin() != null && nature.isPrime() && nature.isFacturation()) {
 			long nbJours = ChronoUnit.DAYS.between(mission.getDate_debut(), mission.getDate_fin()) + 1;
 			int TJM = nature.getTjm();
@@ -69,6 +74,7 @@ public class LoadPrime {
 			}
 			montant = (int) ((nbJours * TJM * pourcentage / 100 - deduction) * 100);
 		}
+		
 		Prime prime = mission.getPrime();
 		if (prime == null) {
 			prime = new Prime(mission.getDate_debut(), mission.getDate_fin(), montant, deduction);
@@ -78,10 +84,12 @@ public class LoadPrime {
 			prime.setMontant(montant);
 			prime.setDeduction(deduction);
 		}
+		
 		prime.setCollegue(mission.getCollegue());
 		prime.setNature(mission.getNature());
 		primeRepo.save(prime);
 		mission.setPrime(prime);
+		
 		return mission;
 	}
 }

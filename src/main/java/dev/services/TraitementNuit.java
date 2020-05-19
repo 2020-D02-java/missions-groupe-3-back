@@ -14,6 +14,7 @@ import dev.repository.MissionRepo;
  *         EN_ATTENTE_VALIDATION <br/>
  *         charge la prime associee si une nature est definie
  */
+
 @Service
 public class TraitementNuit {
 	@Autowired

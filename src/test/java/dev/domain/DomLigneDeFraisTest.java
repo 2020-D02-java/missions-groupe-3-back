@@ -15,7 +15,7 @@ class DomLigneDeFraisTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		noteDeFrais = new NoteDeFrais("facture1", 10000, LocalDate.now());
-		ligneDeFrais = new LigneDeFrais("restaurant", 1500);
+		ligneDeFrais = new LigneDeFrais(1, "restaurant", 1500);
 		ligneDeFrais.setNote_de_frais(noteDeFrais);
 	}
 

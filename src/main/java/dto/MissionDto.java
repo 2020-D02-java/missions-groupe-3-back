@@ -11,6 +11,8 @@ public class MissionDto {
 
 	private Nature nature;
 
+	private Integer primeId;
+
 	private PrimeDtoComplet prime;
 
 	private boolean validation;
@@ -41,6 +43,7 @@ public class MissionDto {
 	 * @param ville_arrive
 	 * @param transport
 	 */
+
 	public MissionDto(Integer id, long collegueId, Nature nature, PrimeDtoComplet prime, boolean validation,
 			LocalDate date_debut, LocalDate date_fin, String ville_depart, String ville_arrive, String transport,
 			String statut) {

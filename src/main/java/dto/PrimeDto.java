@@ -2,6 +2,8 @@ package dto;
 
 import java.time.LocalDate;
 
+import dev.domain.Mission;
+
 /**Structure modèlisant un prime lié à une mission avec une note de frais donnée à communiquer avec l'extérieur (WEB API).
  * @author Salaheddine El Majdoub
  *
@@ -13,6 +15,7 @@ public class PrimeDto {
     private LocalDate date;
     
 	private Integer montant;
+	
 
 	/**Constructeur
 	 * @param id
@@ -24,6 +27,7 @@ public class PrimeDto {
 		this.id = id;
 		this.date = date;
 		this.montant = montant;
+
 	}
 
 	/**Getter
@@ -67,6 +71,8 @@ public class PrimeDto {
 	public void setMontant(Integer montant) {
 		this.montant = montant;
 	}
+
+
 	
 	
 

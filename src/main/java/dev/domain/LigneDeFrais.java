@@ -19,6 +19,8 @@ public class LigneDeFrais {
 
 	private Integer prix;
 	
+	private LocalDate date;
+	
 	private Integer noteFraisID;
 
 	@ManyToOne
@@ -39,8 +41,9 @@ public class LigneDeFrais {
 	 * @param type
 	 * @param prix
 	 */
-	public LigneDeFrais(String type, Integer prix) {
+	public LigneDeFrais(Integer id, String type, Integer prix) {
 		super();
+		this.id = id;
 		this.type = type;
 		this.prix = prix;
 	}
@@ -111,6 +114,20 @@ public class LigneDeFrais {
 	 */
 	public void setNote_de_frais(NoteDeFrais note_de_frais) {
 		this.note_de_frais = note_de_frais;
+	}
+
+	/**Setter
+	 * @return date de ligne de frais
+	 */
+	public LocalDate getDate() {
+		return date;
+	}
+
+	/**Setter
+	 * @param date de ligne de frais
+	 */
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 

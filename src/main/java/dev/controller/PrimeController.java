@@ -55,6 +55,21 @@ public class PrimeController {
 
 	// Methode retourne une liste de prime (ou un seul) qui correspond à la note de
 	// frais d'une mission donnée
+	
+	@GetMapping("/id")
+	public PrimeDto getPrime(@RequestParam("idNote") int idNote) {
+//		List<NoteDeFrais> notesFrais = this.noteDeFraisRepo.findAll();
+		
+		Optional<NoteDeFrais> noteFraisOptional = noteDeFraisRepo.findById(idNote);
+	
+		NoteDeFrais note = noteFraisOptional.get();
+		Mission mission = note.getMission();
+		return new PrimeDto(mission.getPrime().getId(), mission.getPrime().getDate_debut(),
+				mission.getPrime().getMontant());
+		}
+	
+
+
 
 	@GetMapping("{UUID}")
 	public List<PrimeDto> getPrime(@PathVariable String UUID) {

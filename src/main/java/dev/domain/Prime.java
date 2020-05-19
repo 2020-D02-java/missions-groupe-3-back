@@ -42,6 +42,20 @@ public class Prime {
 	/**
 	 * Constructor
 	 * 
+	 * @param deduction
+	 * @param date
+	 * @param montant
+	 */
+	public Prime(Integer deduction, LocalDate date, Integer montant) {
+		super();
+		this.deduction = deduction;
+		this.date_debut= date;
+		this.montant = montant;
+	}
+	
+	/**
+	 * Constructor
+	 * 
 	 * @param date
 	 * @param montant
 	 */
@@ -65,6 +79,7 @@ public class Prime {
 		this.montant = montant;
 		this.deduction = deduction;
 	}
+
 
 	/**
 	 * Getter
