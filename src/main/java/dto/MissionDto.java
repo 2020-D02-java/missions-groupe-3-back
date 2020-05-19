@@ -13,6 +13,8 @@ public class MissionDto {
 
 	private Integer primeId;
 
+	private PrimeDtoComplet prime;
+
 	private boolean validation;
 
 	private LocalDate date_debut;
@@ -41,14 +43,15 @@ public class MissionDto {
 	 * @param ville_arrive
 	 * @param transport
 	 */
-	public MissionDto(Integer id, long collegueId, Nature nature, Integer primeId, boolean validation,
+
+	public MissionDto(Integer id, long collegueId, Nature nature, PrimeDtoComplet prime, boolean validation,
 			LocalDate date_debut, LocalDate date_fin, String ville_depart, String ville_arrive, String transport,
 			String statut) {
 		super();
 		this.id = id;
 		this.collegueId = collegueId;
 		this.nature = nature;
-		this.primeId = primeId;
+		this.prime = prime;
 		this.validation = validation;
 		this.date_debut = date_debut;
 		this.date_fin = date_fin;
@@ -122,8 +125,8 @@ public class MissionDto {
 	 * 
 	 * @return the prime
 	 */
-	public Integer getPrimeId() {
-		return primeId;
+	public PrimeDtoComplet getPrime() {
+		return prime;
 	}
 
 	/**
@@ -131,8 +134,8 @@ public class MissionDto {
 	 * 
 	 * @param prime the prime to set
 	 */
-	public void setPrime(Integer primeId) {
-		this.primeId = primeId;
+	public void setPrime(PrimeDtoComplet prime) {
+		this.prime = prime;
 	}
 
 	/**

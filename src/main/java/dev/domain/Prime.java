@@ -20,7 +20,6 @@ public class Prime {
 	private LocalDate date_fin;
 
 	private Integer montant;
-	
 
 	private Integer deduction;
 
@@ -46,7 +45,6 @@ public class Prime {
 	 * @param deduction
 	 * @param date
 	 * @param montant
-	 * @param collegue
 	 */
 	public Prime(Integer deduction, LocalDate date, Integer montant) {
 		super();
@@ -81,6 +79,7 @@ public class Prime {
 		this.montant = montant;
 		this.deduction = deduction;
 	}
+
 
 	/**
 	 * Getter

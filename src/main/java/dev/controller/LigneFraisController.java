@@ -39,7 +39,7 @@ public class LigneFraisController {
 		this.noteFraisRepo = noteFraisRepo;
 	}
 	
-	// Get : Récuperation des ligne de frais à partir de l'identifiant d'une note de frais
+	// Get : Récupération des ligne de frais à partir de l'identifiant d'une note de frais
 	@GetMapping("/id")
 	public List<LigneDeFraisDto> gestionNotesDeFrais(@RequestParam("idNote") int idNote) {
 		Optional<NoteDeFrais> noteFraisOptional = noteFraisRepo.findById(idNote);
@@ -48,7 +48,7 @@ public class LigneFraisController {
 		if (noteFraisOptional.isPresent()) {
 			NoteDeFrais noteFrais = noteFraisOptional.get();
 
-			ligneFrais = ligneFraisRepo.findByNoteDeFrais(noteFrais);
+			ligneFrais = ligneFraisRepo.findByNote_de_frais(noteFrais);
 			for (LigneDeFrais ligne : ligneFrais) {
 				resultat.add(new LigneDeFraisDto(ligne.getDate().toString(), ligne.getId(), ligne.getType(),
 						ligne.getPrix(), ligne.getNote_de_frais().getId()));

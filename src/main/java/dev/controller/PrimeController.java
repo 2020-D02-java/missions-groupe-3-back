@@ -67,26 +67,36 @@ public class PrimeController {
 		return new PrimeDto(mission.getPrime().getId(), mission.getPrime().getDate_debut(),
 				mission.getPrime().getMontant());
 		}
-		
-//		List<Mission> missions = this.missionRepo.findAll();
-//		int idNote = Integer.parseInt(UUID.replace("UUID=", ""));
-//		int idMission = -1;
-//		for (NoteDeFrais note : notesFrais) {
-//			if (note.getId() == idNote)
-//				idMission = note.getMission().getId();
-//		}
-//
-//		List<PrimeDto> resultat = new ArrayList<>();
-//		for (Mission mission : missions)
-//			if (mission.getId() == idMission)
-//				
-//
-//		return resultat;
+	
+
+
+
+	@GetMapping("{UUID}")
+	public List<PrimeDto> getPrime(@PathVariable String UUID) {
+		List<NoteDeFrais> notesFrais = this.noteDeFraisRepo.findAll();
+		List<Mission> missions = this.missionRepo.findAll();
+		int idNote = Integer.parseInt(UUID.replace("UUID=", ""));
+		int idMission = -1;
+		for (NoteDeFrais note : notesFrais) {
+			if (note.getId() == idNote)
+				idMission = note.getMission().getId();
+		}
+
+		List<PrimeDto> resultat = new ArrayList<>();
+		for (Mission mission : missions)
+			if (mission.getId() == idMission)
+
+				resultat.add(new PrimeDto(mission.getPrime().getId(), mission.getPrime().getDate_debut(),
+						mission.getPrime().getMontant()));
+
+		return resultat;
+	}
 
 	/**
 	 * GET : primes/collegue?email=xxx@dev.fr recupere les primes d'un collegue
 	 */
-	@GetMapping(value = "/collegue")
+	@GetMapping
+	@RequestMapping(value = "/collegue")
 	public List<PrimeDtoComplet> primesCollegue(@RequestParam("email") String email,
 			@RequestParam("tri_date") String tri_date, @RequestParam("annee") Integer annee) {
 		Optional<Collegue> collegueOptional = collegueRepo.findByEmail(email);
@@ -95,15 +105,16 @@ public class PrimeController {
 			Collegue collegue = collegueOptional.get();
 			List<Prime> primes = new ArrayList<>();
 			if (tri_date.equals(""))
-				primes = primeRepo.findByCollegue(collegue);
+				primes = primeRepo.findByCollegueValidee(collegue);
 			else if (tri_date.equals("true"))
-				primes = primeRepo.findByCollegueAsc(collegue);
+				primes = primeRepo.findByCollegueAscValidee(collegue);
 			else if (tri_date.equals("false"))
-				primes = primeRepo.findByCollegueDesc(collegue);
+				primes = primeRepo.findByCollegueDescValidee(collegue);
 			for (Prime prime : primes) {
 				int anneePrime = prime.getDate_debut().getYear();
-				if (anneePrime == annee)
+				if (anneePrime == annee) {
 					primesDto.add(EntiteToDto.primesToDto(prime));
+				}
 			}
 		}
 		return primesDto;

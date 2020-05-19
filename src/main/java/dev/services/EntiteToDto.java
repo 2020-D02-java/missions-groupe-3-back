@@ -2,30 +2,39 @@ package dev.services;
 
 import dev.domain.Mission;
 import dev.domain.Nature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import dev.domain.Mission;
 import dev.domain.Prime;
 import dto.MissionDto;
 import dto.PrimeDtoComplet;
 
+@Service
 public class EntiteToDto {
 
-	public static MissionDto missionToDto(MissionDto missionDto, Mission mission) {
-		if (mission.getNature() != null && mission.getPrime() != null) {
-			missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), mission.getNature(),
-					mission.getPrime().getId(), mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
-					mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
-		} else if (mission.getNature() == null && mission.getPrime() != null) {
-			missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), new Nature(),
-					mission.getPrime().getId(), mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(),
-					mission.getVille_depart(), mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
-		} else if (mission.getPrime() == null) {
-			missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), mission.getNature(), -1,
-					mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
-					mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
-		} else {
-			missionDto = new MissionDto(mission.getId(), mission.getCollegue().getId(), new Nature(), null,
-					mission.isValidation(), mission.getDate_debut(), mission.getDate_fin(), mission.getVille_depart(),
-					mission.getVille_arrive(), mission.getTransport(), mission.getStatut());
+	@Autowired
+	LoadPrime loadPrime;
+
+	public EntiteToDto(LoadPrime loadPrime) {
+		this.loadPrime = loadPrime;
+	}
+
+	public MissionDto missionToDto(Mission mission) {
+		MissionDto missionDto = new MissionDto();
+		missionDto.setId(mission.getId());
+		missionDto.setCollegueId(mission.getCollegue().getId());
+		missionDto.setValidation(mission.isValidation());
+		missionDto.setDate_debut(mission.getDate_debut());
+		missionDto.setDate_fin(mission.getDate_fin());
+		missionDto.setVille_depart(mission.getVille_depart());
+		missionDto.setVille_arrive(mission.getVille_arrive());
+		missionDto.setTransport(mission.getTransport());
+		missionDto.setStatut(mission.getStatut());
+		mission = loadPrime.loadPrime(mission);
+		if (mission.getPrime() != null) {
+			missionDto.setPrime(EntiteToDto.primesToDto(mission.getPrime()));
 		}
+		missionDto.setNature(mission.getNature());
 		return missionDto;
 	}
 
