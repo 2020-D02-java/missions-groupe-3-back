@@ -28,6 +28,7 @@ import dev.repository.LigneDeFraisRepo;
 import dev.repository.MissionRepo;
 import dev.repository.NatureRepo;
 import dev.repository.NoteDeFraisRepo;
+import dev.repository.PrimeRepo;
 import dev.services.DtoToEntite;
 import dev.services.EntiteToDto;
 import dev.services.LoadPrime;
@@ -52,6 +53,9 @@ public class MissionController {
 
 	@Autowired
 	LigneDeFraisRepo ligneDeFraisRepo;
+
+	@Autowired
+	PrimeRepo primeRepo;
 
 	@Autowired
 	LoadPrime loadPrime;
@@ -175,6 +179,7 @@ public class MissionController {
 				noteDeFraisRepo.delete(noteDeFrais.get());
 			}
 			missionRepo.delete(mission.get());
+			primeRepo.delete(mission.get().getPrime());
 			return "\"mission supprimee\"";
 		} else {
 			return "\"erreur:404\"";
