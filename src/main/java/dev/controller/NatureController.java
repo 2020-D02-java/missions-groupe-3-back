@@ -39,7 +39,6 @@ public class NatureController {
 		return natures;
 	}
 	
-	
 	/** DELETE : suppression d'une nature **/
 	
 	@DeleteMapping
@@ -61,8 +60,7 @@ public class NatureController {
 		}
 		return ResponseEntity.status(400).body("\"La nature est introuvable\"");
 	}
-	
-	
+
 	/** POST : ajout d'une nature **/
 	
 	@PostMapping
