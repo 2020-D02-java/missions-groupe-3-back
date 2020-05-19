@@ -104,8 +104,27 @@ public class LigneFraisController {
 
 		return ResponseEntity.status(200).body(ligneDeFraisDto);
 	}
-
 	
+	// POST : supression d'une ligne de frais 
+	@DeleteMapping("/supprimer")
+	@CrossOrigin
+	public ResponseEntity<Object>supprimerLigneDeFrais(@RequestParam("idLigne") int idLigne ) {
+
+	 	Optional<LigneDeFrais>ligneAsupprimerOpt = this.ligneFraisRepo.findById(idLigne);
+	 	if (ligneAsupprimerOpt.isPresent())
+	 	{
+	 		LigneDeFrais ligneAsupprimer = ligneAsupprimerOpt.get();
+		 	ligneFraisRepo.delete(ligneAsupprimer);
+		 	Optional<NoteDeFrais> noteFraisOptional = noteFraisRepo.findById(ligneAsupprimer.getNote_de_frais().getId());
+			NoteDeFrais noteFrais = noteFraisOptional.get();
+			LOG.info("note old prix "+ noteFrais.getPrix() + "old prix ligne "+  ligneAsupprimer.getPrix() );
+
+			noteFrais.setPrix((noteFrais.getPrix() - ligneAsupprimer.getPrix()));
+			noteFraisRepo.save(noteFrais);
+	 	}
+	 	
+	 	return ResponseEntity.status(200).body(idLigne);
+	}
 
 
 }
